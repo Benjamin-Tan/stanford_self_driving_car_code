@@ -102,7 +102,7 @@ char* dgc_hostname() {
         }
         else strcpy(hostname, Host);
         mark = strchr(hostname, '.');
-        if (mark) mark = '\0';
+        if (mark) *mark = '\0';
     }
 
     return hostname;

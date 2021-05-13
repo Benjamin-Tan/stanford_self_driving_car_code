@@ -127,7 +127,7 @@ private:
   CurvePoint cp_;
 
 private:
-  static const double ARC_LENGTH_TOLERANCE = 0.0000001; // Application specific tolerance
+  static constexpr double ARC_LENGTH_TOLERANCE = 0.0000001; // Application specific tolerance
   double q1_, q2_, q3_, q4_, q5_; // These belong to balf()
 };
 

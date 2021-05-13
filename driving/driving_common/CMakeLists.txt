@@ -72,7 +72,7 @@ include_directories(
 )
 #common commands for building c++ executables and libraries
 add_library(${PROJECT_NAME} src/comp_stdio.cpp src/lineBuffer.cpp src/scaledTime.cpp src/GlobalPose.cpp src/PoseQueue.cpp)
-target_link_libraries(${PROJECT_NAME} ${catkin_LIBRARIES})
+#target_link_libraries(${PROJECT_NAME} ${catkin_LIBRARIES})
 #rosbuild_add_boost_directories()
 #rosbuild_link_boost(${PROJECT_NAME} thread)
 #rosbuild_add_executable(example examples/example.cpp)
