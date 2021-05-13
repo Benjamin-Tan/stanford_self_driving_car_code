@@ -65,7 +65,7 @@ class Lane : public NetElement
 public:
 	friend class RoadNetwork;
 
-	static const double default_width = 4.5;
+	static constexpr double default_width = 4.5;
 
 	enum eBoundaryTypes
 	{

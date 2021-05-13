@@ -98,6 +98,11 @@ typedef CGAL::Circle_2< Kernel > Circle_2;
 //! The 2D Box
 typedef CGAL::Bbox_2 Bbox_2;
 
+inline bool isdegenerated(const Kernel::FT v) {
+	return ! isfinite( v );
+	//    return v==INFINITY || v==-INFINITY || isnan((float)v);
+};
+
 
 /*!
    An extended 2D Vector/Point
@@ -145,18 +150,13 @@ struct VectorPoint_extended : public CLASS
         //return value.x()==0.0/0.0 || value.y()==0.0/0.0;
     };
 private:
-    static const Kernel::FT delta = 0.0000000001;
+    static constexpr Kernel::FT delta = 0.0000000001;
 };
 
 
 typedef VectorPoint_extended< CGAL::Vector_2 < Kernel > > Vector_2_extended;
 typedef VectorPoint_extended< CGAL::Point_2 < Kernel > > Point_2_extended;
 
-
-inline bool isdegenerated(const Kernel::FT v) {
-	return ! isfinite( v );
-	//    return v==INFINITY || v==-INFINITY || isnan((float)v);
-};
 
 /**
  * A long double abs(long double) seems to be missing. So we implemente it here.
