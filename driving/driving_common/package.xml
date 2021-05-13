@@ -1,0 +1,23 @@
+<package format="2">
+  <name>driving_common</name>
+  <version>0.0.0</version>
+  <description>driving_common</description>
+  <maintainer email="stanforddriving@todo.todo">stanforddriving</maintainer>
+
+  <license>BSD</license>
+  <url>http://ros.org/wiki/driving_common</url>
+
+  <buildtool_depend>catkin</buildtool_depend>
+  <build_depend>roscpp</build_depend>
+  <build_depend>message_generation</build_depend>
+  <build_export_depend>roscpp</build_export_depend>
+  <exec_depend>roscpp</exec_depend>
+  <exec_depend>message_runtime</exec_depend>
+
+  <!-- <export>
+    <cpp cflags="-I${prefix}/include" lflags="-L${prefix}/lib -ldriving_common"/>
+  </export> -->
+
+</package>
+
+

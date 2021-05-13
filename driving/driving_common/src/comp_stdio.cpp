@@ -78,7 +78,7 @@ cio::FILE* fopen(const char* filename, const char* mode)
       delete fp;
       return NULL;
     }
-    fp->comp_fp = (void**)gzdopen(fileno(fp->fp), mode);
+    fp->comp_fp = (gzFile_s**)gzdopen(fileno(fp->fp), mode);
     if(fp->comp_fp == NULL) {
       fclose(fp->fp);
       delete fp;
@@ -93,7 +93,7 @@ int fgetc(cio::FILE* fp)
   if(!fp->compressed)
     return fgetc(fp->fp);
   else
-    return gzgetc(fp->comp_fp);
+    return gzgetc(*fp->comp_fp);
 }
 
 int feof(cio::FILE* fp)
@@ -101,7 +101,7 @@ int feof(cio::FILE* fp)
   if(!fp->compressed)
     return feof(fp->fp);
   else
-    return gzeof(fp->comp_fp);
+    return gzeof(*fp->comp_fp);
 }
 
 int fseek(cio::FILE* fp, off64_t offset, int whence)
@@ -111,17 +111,17 @@ int fseek(cio::FILE* fp, off64_t offset, int whence)
   if(!fp->compressed)
     return fseeko64(fp->fp, offset, whence);
   else {
-    err = gzseek(fp->comp_fp, offset, whence);
+    err = gzseek(*fp->comp_fp, offset, whence);
 
     if(err < 0 && whence == SEEK_SET && offset == 0) {
-      gzclose(fp->comp_fp);
+      gzclose(*fp->comp_fp);
 
       fp->fp = fopen64(fp->filename, fp->mode);
       if(fp->fp == NULL) {
 	delete fp;
 	return -1;
       }
-      fp->comp_fp = (void**)gzdopen(fileno(fp->fp), fp->mode);
+      fp->comp_fp = (gzFile_s**)gzdopen(fileno(fp->fp), fp->mode);
       if(fp->comp_fp == NULL) {
 	fclose(fp->fp);
 	delete fp;
@@ -140,7 +140,7 @@ off64_t ftell(cio::FILE* fp)
   if(!fp->compressed)
     return ftello64(fp->fp);
   else
-    return gztell(fp->comp_fp);
+    return gztell(*fp->comp_fp);
 }
 
 int fclose(cio::FILE* fp)
@@ -148,7 +148,7 @@ int fclose(cio::FILE* fp)
   if(!fp->compressed)
     return fclose(fp->fp);
   else
-    return gzclose(fp->comp_fp);
+    return gzclose(*fp->comp_fp);
 }
 
 size_t fread(void *ptr, size_t size, size_t nmemb, cio::FILE* fp)
@@ -156,7 +156,7 @@ size_t fread(void *ptr, size_t size, size_t nmemb, cio::FILE* fp)
   if(!fp->compressed)
     return fread(ptr, size, nmemb, fp->fp);
   else
-    return gzread(fp->comp_fp, ptr, size * nmemb) / size;
+    return gzread(*fp->comp_fp, ptr, size * nmemb) / size;
 }
 
 size_t fwrite(const void *ptr, size_t size, size_t nmemb, cio::FILE* fp)
@@ -164,7 +164,7 @@ size_t fwrite(const void *ptr, size_t size, size_t nmemb, cio::FILE* fp)
   if(!fp->compressed)
     return fwrite(ptr, size, nmemb, fp->fp);
   else
-    return gzwrite(fp->comp_fp, (void *)ptr, size * nmemb) / size;
+    return gzwrite(*fp->comp_fp, (void *)ptr, size * nmemb) / size;
 }
 
 char* fgets(char* s, int size, cio::FILE* fp)
@@ -172,7 +172,7 @@ char* fgets(char* s, int size, cio::FILE* fp)
   if(!fp->compressed)
     return fgets(s, size, fp->fp);
   else
-    return gzgets(fp->comp_fp, s, size);
+    return gzgets(*fp->comp_fp, s, size);
 }
 
 int fputc(int c, cio::FILE* fp)
@@ -180,7 +180,7 @@ int fputc(int c, cio::FILE* fp)
   if(!fp->compressed)
     return fputc(c, fp->fp);
   else
-    return gzputc(fp->comp_fp, c);
+    return gzputc(*fp->comp_fp, c);
 }
 
 void fprintf(cio::FILE* fp, const char* fmt, ...)
@@ -218,7 +218,7 @@ int fflush(cio::FILE* fp)
   if(!fp->compressed)
     return fflush(fp->fp);
   else
-    return gzflush(fp->comp_fp, Z_SYNC_FLUSH);
+    return gzflush(*fp->comp_fp, Z_SYNC_FLUSH);
 }
 
 } // namespace cio
