@@ -43,7 +43,7 @@
 namespace velodyne
 {
 
-  PLUGINLIB_DECLARE_CLASS(velodyne, Points, velodyne::Points, nodelet::Nodelet);
+  PLUGINLIB_EXPORT_CLASS(velodyne::Points, nodelet::Nodelet);
 
   Points::Points() :
     last_encoder_(0)
@@ -93,7 +93,7 @@ namespace velodyne
   void Points::publish()
   {
     cloud_.header.frame_id = "Velodyne";
-    cloud_.header.stamp = ros::Time::now();
+    cloud_.header.stamp = ros::Time::now().toSec();
     points_pub_.publish(cloud_); 
     cloud_.width = 0;
     cloud_.points.clear();

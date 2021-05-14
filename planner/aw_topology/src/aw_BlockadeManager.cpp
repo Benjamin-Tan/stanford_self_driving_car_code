@@ -40,6 +40,8 @@
 #include <global.h>
 #include <aw_BlockadeManager.hpp>
 
+namespace drc = driving_common;
+
 namespace vlr {
 
 using namespace RoutePlanner;
@@ -67,7 +69,7 @@ BlockadeManager::Blockade::~Blockade()
 
 void BlockadeManager::Blockade::update()
 {
-  last_update_time = Time::current();
+  last_update_time = drc::Time::current();
   update_counter++;
   if(update_counter > BLOCKADE_PUBLISH_MIN) {
     publish();
@@ -87,7 +89,7 @@ double BlockadeManager::Blockade::getLastUpdateTime()
 
 void BlockadeManager::Blockade::forcePublish()
 {
-  last_update_time = Time::current();
+  last_update_time = drc::Time::current();
   update_counter = BLOCKADE_PUBLISH_MIN+1;
   publish();
 }
@@ -164,7 +166,7 @@ void BlockadeManager::deleteBlockade(RndfEdge* edge)
 bool BlockadeManager::update( )
 {
   TBlockageMap::iterator it, it_end;
-  double current_timestamp = Time::current();
+  double current_timestamp = drc::Time::current();
   double diff_time;
   std::vector< RndfEdge* > deleted_objects;
 

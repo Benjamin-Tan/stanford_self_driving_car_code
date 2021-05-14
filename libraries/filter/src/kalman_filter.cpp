@@ -101,26 +101,32 @@ KalmanFilter::~KalmanFilter() {
 
 gsl_vector* KalmanFilter::predictTransition(gsl_vector* state) {
   gsl_vector* next;
+  gsl_vector tmp;
   if((int)state->size >= state_dim_) {
     next = vector_init(state->size);
     vector_copy(next, state);
   } else {
     next = vector_init(state_dim_);
-    vector_copy(&(gsl_vector_subvector(next, 0, state->size)).vector, state);
+    tmp = (gsl_vector_subvector(next, 0, state->size)).vector;
+    vector_copy(&tmp, state);
   }
   gsl_vector* curr = vector_init(state_dim_);
-  if((int)state->size > state_dim_)
-    vector_copy(curr, &(gsl_vector_subvector(state, 0, state_dim_)).vector);
-  else if((int)state->size < state_dim_) {
+  if((int)state->size > state_dim_) {
+    tmp = (gsl_vector_subvector(state, 0, state_dim_)).vector;
+    vector_copy(curr, &tmp);
+  } else if((int)state->size < state_dim_) {
     vector_copy(curr, mean_);
-    vector_copy(&(gsl_vector_subvector(curr, 0, state->size)).vector, state);
+    tmp = (gsl_vector_subvector(curr, 0, state->size)).vector;
+    vector_copy(&tmp, state);
   } else
     vector_copy(curr, state);
-  matrix_vector_multiply(&(gsl_vector_subvector(next, 0, state_dim_)).vector, transition_mat_, curr);
+  tmp = (gsl_vector_subvector(next, 0, state_dim_)).vector;
+  matrix_vector_multiply(&tmp, transition_mat_, curr);
   vector_free(curr);
   if((int)state->size < state_dim_) {
     gsl_vector* temp = vector_init(state->size);
-    vector_copy(temp, &(gsl_vector_subvector(next, 0, state->size)).vector);
+    tmp = (gsl_vector_subvector(next, 0, state->size)).vector;
+    vector_copy(temp, &tmp);
     vector_free(next);
     next = temp;
   }
@@ -139,6 +145,7 @@ gsl_vector* KalmanFilter::predictObservation(gsl_vector* state) {
   int observation_dim = observation_mat_->size1;
 
   gsl_vector* obs;
+  gsl_vector tmp;
   if((int)state->size <= state_dim_) {
     obs = vector_init(observation_dim);
     gsl_vector_set_zero(obs);
@@ -150,14 +157,17 @@ gsl_vector* KalmanFilter::predictObservation(gsl_vector* state) {
     }
   }
   gsl_vector* curr = vector_init(state_dim_);
-  if((int)state->size > state_dim_)
-    vector_copy(curr, &(gsl_vector_subvector(state, 0, state_dim_)).vector);
-  else if((int)state->size < state_dim_) {
+  if((int)state->size > state_dim_) {
+    tmp = (gsl_vector_subvector(state, 0, state_dim_)).vector;
+    vector_copy(curr, &tmp);
+  } else if((int)state->size < state_dim_) {
     vector_copy(curr, mean_);
-    vector_copy(&(gsl_vector_subvector(curr, 0, state->size)).vector, state);
+    tmp = (gsl_vector_subvector(curr, 0, state->size)).vector;
+    vector_copy(&tmp, state);
   } else
     vector_copy(curr, state);
-  matrix_vector_multiply(&(gsl_vector_subvector(obs, 0, observation_dim)).vector, observation_mat_, curr);
+  tmp = (gsl_vector_subvector(obs, 0, observation_dim)).vector;
+  matrix_vector_multiply(&tmp, observation_mat_, curr);
   vector_free(curr);
   return obs;
 }

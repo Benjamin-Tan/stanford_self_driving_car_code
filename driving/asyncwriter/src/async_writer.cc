@@ -39,7 +39,7 @@
 #include <async_writer.h>
 #include <global.h>
 #include <string.h>
-
+#include <fcntl.h>
 namespace dgc {
 
 AsyncWriter::AsyncWriter()

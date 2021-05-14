@@ -1,5 +1,18 @@
 cmake_minimum_required(VERSION 2.4.6)
-include($ENV{ROS_ROOT}/core/rosbuild/rosbuild.cmake)
+project(velodyne)
+## Compile as C++11, supported in ROS Kinetic and newer
+# add_compile_options(-std=c++11)
+
+find_package(catkin REQUIRED COMPONENTS
+  roscpp
+  std_msgs
+  geometry_msgs
+  message_generation
+  velodyne
+  pcl_ros
+  tf
+)
+#include($ENV{ROS_ROOT}/core/rosbuild/rosbuild.cmake)
 
 # Set the build type.  Options are:
 #  Coverage       : w/ debug symbols, w/o optimization, w/ code-coverage
@@ -7,27 +20,61 @@ include($ENV{ROS_ROOT}/core/rosbuild/rosbuild.cmake)
 #  Release        : w/o debug symbols, w/ optimization
 #  RelWithDebInfo : w/ debug symbols, w/ optimization
 #  MinSizeRel     : w/o debug symbols, w/ optimization, stripped binaries
-set(ROS_BUILD_TYPE Debug)
+#set(ROS_BUILD_TYPE Debug)
 
-set(CMAKE_CXX_FLAGS "-std=c++0x")
+#set(CMAKE_CXX_FLAGS "-std=c++0x")
 
-rosbuild_init()
+#rosbuild_init()
 
 #set the default path for built executables to the "bin" directory
-set(EXECUTABLE_OUTPUT_PATH ${PROJECT_SOURCE_DIR}/bin)
+#set(EXECUTABLE_OUTPUT_PATH ${PROJECT_SOURCE_DIR}/bin)
 #set the default path for built libraries to the "lib" directory
-set(LIBRARY_OUTPUT_PATH ${PROJECT_SOURCE_DIR}/lib)
+#set(LIBRARY_OUTPUT_PATH ${PROJECT_SOURCE_DIR}/lib)
 
 #uncomment if you have defined messages
-rosbuild_genmsg()
+#rosbuild_genmsg()
 #uncomment if you have defined services
 #rosbuild_gensrv()
 
-rosbuild_add_library(velocore src/velodyne.cpp src/velodyneConfig.cpp)
-rosbuild_add_library(velo_support src/velo_support.cpp)
-rosbuild_add_library(velodyne_nodelets src/Points.cpp src/Driver.cpp src/Project3D.cpp src/velodyneConfig.cpp)
-rosbuild_add_executable(velodyne src/velodyne_main.cpp)
-target_link_libraries(velodyne velocore z)
+add_message_files(
+  FILES
+  Block.msg
+  BlockRaw.msg
+  Packet.msg
+  Projected.msg
+  Return.msg
+  ScanPoint.msg
+  Stat.msg
+)
+
+generate_messages(
+  DEPENDENCIES
+  std_msgs
+  geometry_msgs
+)
+
+catkin_package(
+  CATKIN_DEPENDS message_runtime
+)
+
+include_directories(
+  include
+  ../../driving/dgcglobal/include
+  ../../driving/driving_common/include
+  ../../driving/asyncwriter/include
+  #../../perception/grid/include
+  ${catkin_INCLUDE_DIRS}
+)
+
+add_library(velocore src/velodyne.cpp src/velodyneConfig.cpp)
+add_library(velo_support src/velo_support.cpp)
+add_library(velodyne_nodelets src/Points.cpp src/Driver.cpp src/Project3D.cpp src/velodyneConfig.cpp)
+add_executable(velodyne src/velodyne_main.cpp)
+
+target_link_libraries(velocore velocore z ${catkin_LIBRARIES} driving_common async_writer)
+target_link_libraries(velo_support velocore z ${catkin_LIBRARIES} driving_common async_writer)
+target_link_libraries(velodyne_nodelets velocore z ${catkin_LIBRARIES} driving_common async_writer)
+target_link_libraries(velodyne velocore z ${catkin_LIBRARIES} driving_common async_writer)
 #rosbuild_add_executable(velodyne_logger src/velodyne_logger.cpp)
 #target_link_libraries(velodyne_logger velodyne_interface)
 #rosbuild_add_executable(vlf_index src/vlf_index.cpp)

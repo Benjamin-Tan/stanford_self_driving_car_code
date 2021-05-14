@@ -30,7 +30,10 @@ find_package(catkin REQUIRED COMPONENTS
 #rosbuild_genmsg()
 #uncomment if you have defined services
 #rosbuild_gensrv()
-
+find_library(DGCGLOAL dgcglobal)
+find_library(DRIVING_COMMON driving_common)
+find_library(PROJ proj)
+message(${PROJ})
 include_directories(
   include
   ../dgcglobal/include
@@ -38,3 +41,4 @@ include_directories(
   ${catkin_INCLUDE_DIRS}
 )
 add_library(lltransform src/lltoutm.cpp src/lltospcs.cpp)
+target_link_libraries(lltransform ${PROJ} ${DGCGLOAL} ${DRIVING_COMMON} ${catkin_LIBRARIES})

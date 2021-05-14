@@ -42,7 +42,7 @@
 #include <grid.h>
 #include <lltransform.h>
 #include <vlrException.h>
-#include <highgui.h>
+#include <opencv2/highgui.hpp>
 
 #include "laserMap.h"
 

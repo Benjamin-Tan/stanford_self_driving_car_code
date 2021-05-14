@@ -1,5 +1,14 @@
 cmake_minimum_required(VERSION 2.4.6)
-include($ENV{ROS_ROOT}/core/rosbuild/rosbuild.cmake)
+project(aw_chsm_planning)
+## Compile as C++11, supported in ROS Kinetic and newer
+# add_compile_options(-std=c++11)
+
+find_package(catkin REQUIRED COMPONENTS
+  roscpp
+  driving_common
+  perception
+)
+#include($ENV{ROS_ROOT}/core/rosbuild/rosbuild.cmake)
 
 # Set the build type.  Options are:
 #  Coverage       : w/ debug symbols, w/o optimization, w/ code-coverage
@@ -7,24 +16,38 @@ include($ENV{ROS_ROOT}/core/rosbuild/rosbuild.cmake)
 #  Release        : w/o debug symbols, w/ optimization
 #  RelWithDebInfo : w/ debug symbols, w/ optimization
 #  MinSizeRel     : w/o debug symbols, w/ optimization, stripped binaries
-set(ROS_BUILD_TYPE RelWithDebInfo)
+#set(ROS_BUILD_TYPE RelWithDebInfo)
 
-rosbuild_init()
+#rosbuild_init()
 
 #set the default path for built executables to the "bin" directory
-set(EXECUTABLE_OUTPUT_PATH ${PROJECT_SOURCE_DIR}/bin)
+#set(EXECUTABLE_OUTPUT_PATH ${PROJECT_SOURCE_DIR}/bin)
 #set the default path for built libraries to the "lib" directory
-set(LIBRARY_OUTPUT_PATH ${PROJECT_SOURCE_DIR}/lib)
+#set(LIBRARY_OUTPUT_PATH ${PROJECT_SOURCE_DIR}/lib)
 
 #uncomment if you have defined messages
 #rosbuild_genmsg()
 #uncomment if you have defined services
 #rosbuild_gensrv()
-include($ENV{ROS_ROOT}/core/rosbuild/FindPkgConfig.cmake)
-pkg_check_modules(FTGL REQUIRED ftgl)
+#include($ENV{ROS_ROOT}/core/rosbuild/FindPkgConfig.cmake)
+#pkg_check_modules(FTGL REQUIRED ftgl)
 find_package(Freetype REQUIRED)
-include_directories(${FREETYPE_INCLUDE_DIRS})
-link_directories(${FTGL_LIBRARY_DIRS})
+find_package(Eigen3 REQUIRED)
+include_directories(
+	${FREETYPE_INCLUDE_DIRS}
+	include
+	../aw_geometry/include
+	../aw_topology/include
+	../../driving/driving_common/include
+	../../driving/dgcglobal/include
+	../curvesmoothing/include
+	../aw_rndf/include
+	../polytraj/include
+	../../driving/lltransform/include
+	${EIGEN3_INCLUDE_DIR}
+	${catkin_INCLUDE_DIRS}
+)
+#link_directories(${FTGL_LIBRARY_DIRS})
 
 set(SOURCES
 	src/aw_ChsmPlanner.cpp
@@ -59,7 +82,7 @@ set(SOURCES
 	src/trajectoryEvaluator.cpp
 )
 
-rosbuild_add_library(aw_chsm_planning ${SOURCES} )
+add_library(aw_chsm_planning ${SOURCES} )
 
 
 target_link_libraries(aw_chsm_planning ${FREETYPE_LIBRARIES} ${FTGL_LIBRARIES})

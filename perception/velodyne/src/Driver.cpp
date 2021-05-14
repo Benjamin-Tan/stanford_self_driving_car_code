@@ -46,7 +46,7 @@
 namespace velodyne
 {
 
-  PLUGINLIB_DECLARE_CLASS(velodyne, Driver, velodyne::Driver, nodelet::Nodelet);
+  PLUGINLIB_EXPORT_CLASS(velodyne::Driver, nodelet::Nodelet);
 
   Driver::Driver() :
     shutdown_(false)

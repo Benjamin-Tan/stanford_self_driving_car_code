@@ -45,7 +45,7 @@
 #include <aw_RndfGraph.h>
 #include <aw_Vehicle.h>
 //#include <aw_MergeFeasabilityCheck.hpp>
-
+namespace drc = driving_common;
 namespace vlr {
 
 class Topology;
@@ -74,8 +74,8 @@ protected:
     double x,y,speed;
   	double time;
   	bool valid;
-  	VehicleState() : x(0), y(0), time(), valid(false) { time = vlr::Time::current(); }
-  	VehicleState(double x, double y) : x(x), y(y), time(), valid(true) { time = vlr::Time::current(); }
+  	VehicleState() : x(0), y(0), time(), valid(false) { time = drc::Time::current(); }
+  	VehicleState(double x, double y) : x(x), y(y), time(), valid(true) { time = drc::Time::current(); }
   	bool isMoving(const Vehicle& veh) {
   		// TODO: tune this constants
   		const double DELTA_D = 0.75;
@@ -99,10 +99,10 @@ protected:
 	  		y = veh.yMatchedFrom();
 	  		speed = veh.speed();
 	  		valid = true;
-	  		time = vlr::Time::current();
+	  		time = drc::Time::current();
 	  		return true;
   		} else {
-  			return vlr::Time::current() < time + DELTA_T;
+  			return drc::Time::current() < time + DELTA_T;
   		}
   	};
   };

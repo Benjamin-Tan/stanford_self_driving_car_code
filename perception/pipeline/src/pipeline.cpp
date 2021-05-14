@@ -152,7 +152,7 @@ string ComputeNode::getFullName() const {
   return oss.str();
 }
 
-void ComputeNode::registerInput(shared_ptr<ComputeNode> input) {
+void ComputeNode::registerInput(boost::shared_ptr<ComputeNode> input) {
   inputs_.push_back(input.get());
   input->outputs_.push_back(this);
 }
@@ -188,7 +188,7 @@ void DescriptorNode::display() const {
   _display();
 }
   
-shared_ptr<VectorXf> DescriptorNode::getDescriptor() const {
+boost::shared_ptr<VectorXf> DescriptorNode::getDescriptor() const {
   assert(done_computation_);
   return _getDescriptor();
 }
@@ -215,7 +215,7 @@ Pipeline::Pipeline(const Pipeline& other) :
   assertCompleteness();
 }
 
-Pipeline::Pipeline(const vector< shared_ptr<ComputeNode> >& nodes, int num_threads) :
+Pipeline::Pipeline(const vector< boost::shared_ptr<ComputeNode> >& nodes, int num_threads) :
   nodes_(nodes),
   num_threads_(num_threads),
   mutex_(pthread_mutex_t()),

@@ -56,6 +56,6 @@ add_library(${PROJECT_NAME} src/aw_match_to_graph.cpp src/aw_RndfGraph.cpp src/a
 add_library(${PROJECT_NAME} src/aw_Vehicle.cpp src/aw_Graph.cpp src/aw_RndfEdge.cpp src/aw_RndfGraphSearch.cpp)
 add_library(${PROJECT_NAME} src/aw_Route.cpp src/aw_VehicleManager.cpp)
 
-target_link_libraries(${PROJECT_NAME} ${FREETYPE_LIBRARIES})
+target_link_libraries(${PROJECT_NAME} ${FREETYPE_LIBRARIES} ${catkin_LIBRARIES})
 #target_link_libraries(${PROJECT_NAME} ${FTGL_LIBRARIES})
 

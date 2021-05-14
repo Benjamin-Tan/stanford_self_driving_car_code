@@ -51,7 +51,7 @@ using namespace std;
 namespace velodyne
 {
 
-  PLUGINLIB_DECLARE_CLASS(velodyne, Project3D, velodyne::Project3D, nodelet::Nodelet);
+  PLUGINLIB_EXPORT_CLASS(velodyne::Project3D, nodelet::Nodelet);
 
   Project3D::Project3D()
   {
@@ -159,7 +159,7 @@ namespace velodyne
     projected.header.stamp = packet->header.stamp;
     projected.header.frame_id = "Velodyne";
     cloud.header.frame_id = "Velodyne";
-    cloud.header.stamp = ros::Time::now();
+    cloud.header.stamp = ros::Time::now().toSec();
     points_pub_.publish(cloud); 
     projected_pub_.publish(projected);
   }

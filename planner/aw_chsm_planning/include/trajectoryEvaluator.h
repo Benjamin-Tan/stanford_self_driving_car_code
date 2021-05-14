@@ -79,14 +79,14 @@ class parameters {
   double reinit_normal_error_rate_thresh;
 
     // Collision check params
-  static const double passat_length = DGC_PASSAT_LENGTH;
-  static const double passat_width = DGC_PASSAT_WIDTH;
-  static const double passat_offset = DGC_PASSAT_IMU_TO_R_BUMPER + 1.0;
+  static constexpr double passat_length = DGC_PASSAT_LENGTH;
+  static constexpr double passat_width = DGC_PASSAT_WIDTH;
+  static constexpr double passat_offset = DGC_PASSAT_IMU_TO_R_BUMPER + 1.0;
 
-  static const double safety_length = DGC_PASSAT_LENGTH + 1.0;
-  static const double no_safety_length = DGC_PASSAT_LENGTH;
-  static const double safety_width = DGC_PASSAT_WIDTH + 1.0;
-  static const double no_safety_width = DGC_PASSAT_WIDTH;
+  static constexpr double safety_length = DGC_PASSAT_LENGTH + 1.0;
+  static constexpr double no_safety_length = DGC_PASSAT_LENGTH;
+  static constexpr double safety_width = DGC_PASSAT_WIDTH + 1.0;
+  static constexpr double no_safety_width = DGC_PASSAT_WIDTH;
 
   double pull_away_time; // smaller than t_horizon!
 

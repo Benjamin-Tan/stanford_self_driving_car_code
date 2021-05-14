@@ -41,7 +41,7 @@
 #include <lltransform.h>
 #include <terrainmap.h>
 #include <opencv2/core/core.hpp>
-#include <highgui.h>
+#include <opencv2/highgui.hpp>
 #include <string.h>
 
 namespace vlr {

@@ -39,6 +39,7 @@
 #include <boost/format.hpp>
 #include <opencv/cv.h>
 #include <opencv/highgui.h>
+#include <opencv2/imgproc.hpp>
 #include <vlrException.h>
 #include <obstacle_types.h>
 #include <perception/PerceptionObstacles.h>
