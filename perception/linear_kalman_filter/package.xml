@@ -1,0 +1,17 @@
+<package format="2">
+  <name>linear_kalman_filter</name>
+  <version>0.0.0</version>
+  <description>linear_kalman_filter</description>
+  <maintainer email="stanforddriving@todo.todo">stanforddriving</maintainer>
+  
+  <license>BSD</license>
+  <url>http://ros.org/wiki/linear_kalman_filter</url>
+
+  <buildtool_depend>catkin</buildtool_depend>
+  <build_depend>roscpp</build_depend>
+  <build_export_depend>roscpp</build_export_depend>
+  <exec_depend>roscpp</exec_depend>
+  
+</package>
+
+

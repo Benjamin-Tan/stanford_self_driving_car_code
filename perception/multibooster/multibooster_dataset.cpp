@@ -503,9 +503,9 @@ MultiBoosterDataset::~MultiBoosterDataset() {
   }
 }
 
-shared_ptr< vector< pair<float, int> > > MultiBoosterDataset::computeSortedDistances(size_t fsid, VectorXf center) {
+boost::shared_ptr< vector< pair<float, int> > > MultiBoosterDataset::computeSortedDistances(size_t fsid, VectorXf center) {
   float center_length_squared = center.dot(center);
-  shared_ptr< vector< pair<float, int> > > distance_idx(new vector< pair<float, int> >(0));
+  boost::shared_ptr< vector< pair<float, int> > > distance_idx(new vector< pair<float, int> >(0));
   distance_idx->reserve(objs_.size());
   
   for(size_t j=0; j<objs_.size(); ++j) {

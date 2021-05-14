@@ -1,0 +1,15 @@
+<package format="2">
+  <name>chamfer_matching</name>
+  <version>0.0.0</version>
+  <description>A chamfer matching library, using both edge distance and orientation.</description>
+  <maintainer email="MariusMuja@todo.todo">Marius Muja</maintainer>
+
+  <license>BSD</license>
+  <url>http://pr.willowgarage.com</url>
+
+  <buildtool_depend>catkin</buildtool_depend>
+  <build_depend>roscpp</build_depend>
+  <build_export_depend>roscpp</build_export_depend>
+  <exec_depend>roscpp</exec_depend>
+
+</package>

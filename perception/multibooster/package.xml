@@ -1,0 +1,17 @@
+<package format="2">
+  <name>multibooster</name>
+  <version>0.0.0</version>
+  <description>MultiBooster is a multi-class, multi-descriptor boosting algorithm which uses hypersphere weak classifiers.</description>
+  <maintainer email="stanforddriving@todo.todo">stanforddriving</maintainer>
+
+  <license>BSD</license>
+  <url>http://ros.org/wiki/multibooster</url>
+
+  <buildtool_depend>catkin</buildtool_depend>
+  <build_depend>roscpp</build_depend>
+  <build_export_depend>roscpp</build_export_depend>
+  <exec_depend>roscpp</exec_depend>
+
+</package>
+
+

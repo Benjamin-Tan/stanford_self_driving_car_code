@@ -570,12 +570,12 @@ void ChamferTemplate::show() const
 			p2.x = x + 10*sin(orientations[i]);
 			p2.y = y + 10*cos(orientations[i]);
 
-			cvLine(templ_color, p1,p2, CV_RGB(255,0,0));
+			cvLine(templ_color, p1,p2, cvScalar(255,0,0));
 		}
 	}
 
 
-	cvCircle(templ_color, center, 1, CV_RGB(0,255,0));
+	cvCircle(templ_color, center, 1, cvScalar(0,255,0));
 
 	cvNamedWindow("templ",1);
 	cvShowImage("templ",templ_color);

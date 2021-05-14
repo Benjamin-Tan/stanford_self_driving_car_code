@@ -42,7 +42,7 @@
 #include <iostream>
 #include <sstream>
 #include <cstdarg>
-#include <python2.6/Python.h>
+#include <python2.7/Python.h>
 #include <Eigen/Eigen>
 #include <boost/algorithm/string.hpp>
 

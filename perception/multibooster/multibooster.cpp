@@ -1168,7 +1168,7 @@ bool MultiBooster::compare(const MultiBooster& mb, bool verbose) {
   return true;
 }
 
-vector< shared_ptr<WeakClassifier> > MultiBooster::createRandomWeakClassifiers(int num_candidates) {
+vector< boost::shared_ptr<WeakClassifier> > MultiBooster::createRandomWeakClassifiers(int num_candidates) {
   assert(mbd_);
 
   // -- Get the weights matrix.
@@ -1182,7 +1182,7 @@ vector< shared_ptr<WeakClassifier> > MultiBooster::createRandomWeakClassifiers(i
 //   cout << "sum: " << weights.sum() << ", total_weight: " << total_weight << endl;
     
   // -- Choose wc candidates from the weights distribution.
-  vector< shared_ptr<WeakClassifier> > cand;
+  vector< boost::shared_ptr<WeakClassifier> > cand;
   for(int iCand=0; iCand<num_candidates; iCand++) {
     double dice01 = ((double)rand() / (double)RAND_MAX);
     double dice =  dice01 * weights.sum(); //The weights aren't necessarily normalized.
@@ -1231,7 +1231,7 @@ vector< shared_ptr<WeakClassifier> > MultiBooster::createRandomWeakClassifiers(i
     }
 
     //Make the weak classifier.
-    shared_ptr<WeakClassifier> wc(new WeakClassifier());
+    boost::shared_ptr<WeakClassifier> wc(new WeakClassifier());
     wc->fsid_ = fsid;
     wc->center_ = *v;
     wc->theta_ = 0;
@@ -1301,15 +1301,15 @@ void MultiBooster::learnWC(int num_candidates, float* util) {
   time_t start, end;
   time(&start);
 
-  vector< shared_ptr<WeakClassifier> > cand = createRandomWeakClassifiers(num_candidates);
+  vector< boost::shared_ptr<WeakClassifier> > cand = createRandomWeakClassifiers(num_candidates);
   if(verbose_) 
     cout << "Added " << num_candidates << " candidate wcs" << endl;
 
   // -- Create pipeline nodes for each candidate.
-  vector< shared_ptr<pipeline::ComputeNode> > plnodes(cand.size());
-  vector< shared_ptr<WCEvaluator> > nodes(cand.size());
+  vector< boost::shared_ptr<pipeline::ComputeNode> > plnodes(cand.size());
+  vector< boost::shared_ptr<WCEvaluator> > nodes(cand.size());
   for(size_t i = 0; i < cand.size(); ++i) {
-    nodes[i] = shared_ptr<WCEvaluator>(new WCEvaluator(this, mbd_, cand[i]));
+    nodes[i] = boost::shared_ptr<WCEvaluator>(new WCEvaluator(this, mbd_, cand[i]));
     plnodes[i] = nodes[i];
   }
 
@@ -1803,7 +1803,7 @@ double sampleFromGaussian(double stdev) {
 
  
 
-WCEvaluator::WCEvaluator(MultiBooster *mb, MultiBoosterDataset *mbd, shared_ptr<WeakClassifier> wc) :
+WCEvaluator::WCEvaluator(MultiBooster *mb, MultiBoosterDataset *mbd, boost::shared_ptr<WeakClassifier> wc) :
   mbd_(mbd),
   mb_(mb),
   wc_(wc),
