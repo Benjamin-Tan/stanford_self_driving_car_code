@@ -65,10 +65,11 @@ add_library(localize_terrainmap src/terrainmap.cpp)
 target_link_libraries(localize_terrainmap lltransform)
 
 add_executable(localize_velodyne src/localizeVelodyne.cpp src/veloClient.cpp src/laserMap.cpp)
-target_link_libraries(localize_velodyne ${OpenCV_LIBS} ${catkin_LIBRARIES} localize_terrainmap z lltransform gls grid velocore velo_support)
+target_link_libraries(localize_velodyne ${OpenCV_LIBS} ${catkin_LIBRARIES} localize_terrainmap z lltransform gls dgcgrid velocore velo_support)
 #target_link_libraries(localize_velodyne z)
 
 add_executable(fake_localize src/fake_localize.cpp)
+add_dependencies(fake_localize ${catkin_EXPORTED_TARGETS})
 target_link_libraries(fake_localize ${catkin_LIBRARIES} z driving_common lltransform)
 #rosbuild_add_executable(map_velodyne src/map_velodyne.cpp)
 #target_link_libraries(map_velodyne localize_terrainmap)

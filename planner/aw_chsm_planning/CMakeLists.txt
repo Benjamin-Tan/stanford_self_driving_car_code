@@ -24,6 +24,7 @@ find_package(catkin REQUIRED COMPONENTS
 #set(EXECUTABLE_OUTPUT_PATH ${PROJECT_SOURCE_DIR}/bin)
 #set the default path for built libraries to the "lib" directory
 #set(LIBRARY_OUTPUT_PATH ${PROJECT_SOURCE_DIR}/lib)
+catkin_package()
 
 #uncomment if you have defined messages
 #rosbuild_genmsg()
@@ -83,7 +84,7 @@ set(SOURCES
 )
 
 add_library(aw_chsm_planning ${SOURCES} )
-
+add_dependencies(aw_chsm_planning ${catkin_EXPORTED_TARGETS})
 
 target_link_libraries(aw_chsm_planning ${FREETYPE_LIBRARIES} ${FTGL_LIBRARIES})
 

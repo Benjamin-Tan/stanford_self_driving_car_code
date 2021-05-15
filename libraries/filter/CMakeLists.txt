@@ -30,6 +30,7 @@ find_package(catkin REQUIRED COMPONENTS
 #rosbuild_genmsg()
 #uncomment if you have defined services
 #rosbuild_gensrv()
+catkin_package()
 
 set(CMAKE_MODULE_PATH ${PROJECT_SOURCE_DIR})
 find_package(GSL REQUIRED)

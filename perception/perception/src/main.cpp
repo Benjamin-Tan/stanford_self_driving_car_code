@@ -40,7 +40,7 @@
 #include <perception.h>
 
 int main(int argc, char **argv) {
-  ros::init(argc, argv, argv[0]);
+  ros::init(argc, argv, "perception");
 
   std::string multibooster_filename;
   if(argc > 1) {

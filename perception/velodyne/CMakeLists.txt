@@ -8,9 +8,9 @@ find_package(catkin REQUIRED COMPONENTS
   std_msgs
   geometry_msgs
   message_generation
-  velodyne
   pcl_ros
   tf
+  driving_common
 )
 #include($ENV{ROS_ROOT}/core/rosbuild/rosbuild.cmake)
 
@@ -65,16 +65,25 @@ include_directories(
   #../../perception/grid/include
   ${catkin_INCLUDE_DIRS}
 )
+find_library(DRIVING_COMMON driving_common)
+find_library(ASYNC_WRITER async_writer)
 
-add_library(velocore src/velodyne.cpp src/velodyneConfig.cpp)
-add_library(velo_support src/velo_support.cpp)
-add_library(velodyne_nodelets src/Points.cpp src/Driver.cpp src/Project3D.cpp src/velodyneConfig.cpp)
-add_executable(velodyne src/velodyne_main.cpp)
+if (DRIVING_COMMON AND ASYNC_WRITER)
+  add_library(velocore src/velodyne.cpp src/velodyneConfig.cpp)
+  add_library(velo_support src/velo_support.cpp)
+  add_library(velodyne_nodelets src/Points.cpp src/Driver.cpp src/Project3D.cpp src/velodyneConfig.cpp)
+  add_executable(velodyne src/velodyne_main.cpp)
 
-target_link_libraries(velocore velocore z ${catkin_LIBRARIES} driving_common async_writer)
-target_link_libraries(velo_support velocore z ${catkin_LIBRARIES} driving_common async_writer)
-target_link_libraries(velodyne_nodelets velocore z ${catkin_LIBRARIES} driving_common async_writer)
-target_link_libraries(velodyne velocore z ${catkin_LIBRARIES} driving_common async_writer)
+  add_dependencies(velocore ${catkin_EXPORTED_TARGETS})
+  add_dependencies(velo_support ${catkin_EXPORTED_TARGETS})
+  add_dependencies(velodyne_nodelets ${catkin_EXPORTED_TARGETS})
+  add_dependencies(velodyne ${catkin_EXPORTED_TARGETS})
+
+  target_link_libraries(velocore velocore z ${catkin_LIBRARIES} ${DRIVING_COMMON} ${ASYNC_WRITER})
+  target_link_libraries(velo_support velocore z ${catkin_LIBRARIES} ${DRIVING_COMMON} ${ASYNC_WRITER})
+  target_link_libraries(velodyne_nodelets velocore z ${catkin_LIBRARIES} ${DRIVING_COMMON} ${ASYNC_WRITER})
+  target_link_libraries(velodyne velocore z ${catkin_LIBRARIES} ${DRIVING_COMMON} ${ASYNC_WRITER})
+endif()
 #rosbuild_add_executable(velodyne_logger src/velodyne_logger.cpp)
 #target_link_libraries(velodyne_logger velodyne_interface)
 #rosbuild_add_executable(vlf_index src/vlf_index.cpp)

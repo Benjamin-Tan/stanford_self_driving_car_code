@@ -36,8 +36,8 @@
  ********************************************************/
 
 
-#define _GLIBCXX_USE_C99_MATH 1
-#define _GLIBCXX_USE_C99_FP_MACROS_DYNAMIC 1
+//#define _GLIBCXX_USE_C99_MATH 1
+//#define _GLIBCXX_USE_C99_FP_MACROS_DYNAMIC 1
 #include <cmath>
 #include <global.h>
 #include <lltransform.h>

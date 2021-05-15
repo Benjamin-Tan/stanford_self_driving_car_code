@@ -22,6 +22,7 @@ find_package(catkin REQUIRED COMPONENTS
 #set(EXECUTABLE_OUTPUT_PATH ${PROJECT_SOURCE_DIR}/bin)
 #set the default path for built libraries to the "lib" directory
 #set(LIBRARY_OUTPUT_PATH ${PROJECT_SOURCE_DIR}/lib)
+catkin_package()
 
 #uncomment if you have defined messages
 #rosbuild_genmsg()
@@ -40,10 +41,14 @@ include_directories(
 
 find_library(MATPLOTLIB_INTERFACE matplotlib_interface)
 
-#common commands for building c++ executables and libraries
-add_library(${PROJECT_NAME} src/linear_kalman_filter.cpp)
-#target_link_libraries(${PROJECT_NAME} another_library)
-#rosbuild_add_boost_directories()
-#rosbuild_link_boost(${PROJECT_NAME} thread)
-add_executable(example src/example.cpp)
-target_link_libraries(example ${PROJECT_NAME} ${MATPLOTLIB_INTERFACE})
+if(MATPLOTLIB_INTERFACE)
+  #common commands for building c++ executables and libraries
+  add_library(${PROJECT_NAME} src/linear_kalman_filter.cpp)
+  #target_link_libraries(${PROJECT_NAME} another_library)
+  #rosbuild_add_boost_directories()
+  #rosbuild_link_boost(${PROJECT_NAME} thread)
+  add_executable(example src/example.cpp)
+  target_link_libraries(example ${PROJECT_NAME} ${MATPLOTLIB_INTERFACE})
+else()
+  message(${PROJECT_NAME} " not build, missing dependencies")
+endif()

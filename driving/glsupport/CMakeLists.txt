@@ -7,6 +7,7 @@ find_package(catkin REQUIRED COMPONENTS
   roscpp
   driving_common
 )
+find_package(OpenCV REQUIRED)
 #include($ENV{ROS_ROOT}/core/rosbuild/rosbuild.cmake)
 
 # Set the build type.  Options are:
@@ -29,6 +30,7 @@ find_package(catkin REQUIRED COMPONENTS
 #rosbuild_genmsg()
 #uncomment if you have defined services
 #rosbuild_gensrv()
+catkin_package()
 
 include_directories(
   include
@@ -36,14 +38,17 @@ include_directories(
   ../driving_common/include
   ../gls/include
   ${catkin_INCLUDE_DIRS}
+  ${OpenCV_INCLUDE_DIRS}
 )
 #include($ENV{ROS_ROOT}/core/rosbuild/FindPkgConfig.cmake)
 #pkg_check_modules(FTGL REQUIRED ftgl)
 find_package(Freetype REQUIRED)
 include_directories(${FREETYPE_INCLUDE_DIRS})
-include_directories(${QT_INCLUDE_DIR})
+#include_directories(${QT_INCLUDE_DIR})
 #link_directories(${FTGL_LIBRARY_DIRS})
 add_library(textures src/textures.cpp)
+target_link_libraries(textures ${OpenCV_LIBS})
 add_library(gl_support src/gl_support.cc src/fontRenderer.cpp src/pointlist.cpp src/facelist.cpp)
-target_link_libraries(gl_support ${FREETYPE_LIBRARIES})
+add_dependencies(gl_support ${catkin_EXPORTED_TARGETS})
+target_link_libraries(gl_support ${FREETYPE_LIBRARIES} ftgl glut GLU)
 #target_link_libraries(gl_support ${FTGL_LIBRARIES})

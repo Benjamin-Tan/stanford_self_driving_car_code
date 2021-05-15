@@ -695,13 +695,13 @@ void getParamTransform(std::string key, dgc::dgc_transform_t& tr) {
   tr[3][1] = 0;
   tr[3][2] = 0;
   tr[3][3] = 1;
-  btMatrix3x3 R = transform.getBasis();
+  tf::Matrix3x3 R = transform.getBasis();
   for (int32_t r = 0; r < 3; r++) {
     for (int32_t c = 0; c < 3; c++) {
       tr[r][c] = R[r][c];
     }
   }
-  btVector3 t = transform.getOrigin();
+  tf::Vector3 t = transform.getOrigin();
   tr[0][3] = t[0];
   tr[1][3] = t[1];
   tr[2][3] = t[2];
@@ -767,7 +767,7 @@ using namespace vlr;
 
 int main(int argc, char **argv) {
 
-  ros::init(argc, argv, argv[0]);
+  ros::init(argc, argv, "multisim");
   nh_ = new ros::NodeHandle("/driving");
   tf_listener_ = new tf::TransformListener;
 

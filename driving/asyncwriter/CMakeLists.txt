@@ -25,16 +25,23 @@ find_package(catkin REQUIRED COMPONENTS
 #set(EXECUTABLE_OUTPUT_PATH ${PROJECT_SOURCE_DIR}/bin)
 #set the default path for built libraries to the "lib" directory
 #set(LIBRARY_OUTPUT_PATH ${PROJECT_SOURCE_DIR}/lib)
+catkin_package()
 
 #uncomment if you have defined messages
 #rosbuild_genmsg()
 #uncomment if you have defined services
 #rosbuild_gensrv()
+find_library(DRIVING_COMMON driving_common)
+find_library(DGCGLOBAL dgcglobal)
 include_directories(
   include
   ../dgcglobal/include
   ../driving_common/include
   ${catkin_INCLUDE_DIRS}
 )
-add_library(async_writer src/async_writer.cc)
-target_link_libraries(async_writer driving_common dgcglobal)
+if (DRIVING_COMMON AND DGCGLOBAL)
+  add_library(async_writer src/async_writer.cc)
+  target_link_libraries(async_writer ${DRIVING_COMMON} ${DGCGLOBAL} ${catkin_LIBRARIES})
+else()
+  message(${PROJECT_NAME} " not build, missing dependencies")
+endif()

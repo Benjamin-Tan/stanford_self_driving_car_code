@@ -6,6 +6,7 @@ project(aw_topology)
 find_package(catkin REQUIRED COMPONENTS
   roscpp
   driving_common
+  perception
 )
 #include($ENV{ROS_ROOT}/core/rosbuild/rosbuild.cmake)
 
@@ -32,6 +33,8 @@ find_package(catkin REQUIRED COMPONENTS
 #rosbuild_gensrv()
 #include($ENV{ROS_ROOT}/core/rosbuild/FindPkgConfig.cmake)
 #pkg_check_modules(FTGL REQUIRED ftgl)
+catkin_package()
+
 find_package(Freetype REQUIRED)
 include_directories(${FREETYPE_INCLUDE_DIRS})
 #link_directories(${FTGL_LIBRARY_DIRS})
@@ -55,7 +58,7 @@ add_library(${PROJECT_NAME} src/aw_RndfIntersection.cpp src/aw_Topology.cpp)
 add_library(${PROJECT_NAME} src/aw_match_to_graph.cpp src/aw_RndfGraph.cpp src/aw_RndfVertex.cpp)
 add_library(${PROJECT_NAME} src/aw_Vehicle.cpp src/aw_Graph.cpp src/aw_RndfEdge.cpp src/aw_RndfGraphSearch.cpp)
 add_library(${PROJECT_NAME} src/aw_Route.cpp src/aw_VehicleManager.cpp)
-
+add_dependencies(${PROJECT_NAME} ${catkin_EXPORTED_TARGETS})
 target_link_libraries(${PROJECT_NAME} ${FREETYPE_LIBRARIES} ${catkin_LIBRARIES})
 #target_link_libraries(${PROJECT_NAME} ${FTGL_LIBRARIES})
 

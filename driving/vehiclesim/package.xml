@@ -1,0 +1,23 @@
+<package format="2">
+  <name>vehiclesim</name>
+  <version>0.0.0</version>
+  <description>vehiclesim</description>
+  <maintainer email="stanforddriving@todo.todo">stanforddriving</maintainer>
+  
+  <license>BSD</license>
+  <url>http://ros.org/wiki/vehiclesim</url>
+
+  <buildtool_depend>catkin</buildtool_depend>
+  <build_depend>roscpp</build_depend>
+  <build_depend>driving_common</build_depend>
+  <build_depend>dgcglobal</build_depend>
+  <build_depend>lltransform</build_depend>
+  <build_depend>aw_rndf</build_depend>
+  <build_depend>applanix</build_depend>
+    
+  <build_export_depend>roscpp</build_export_depend>
+  <exec_depend>roscpp</exec_depend>
+
+</package>
+
+

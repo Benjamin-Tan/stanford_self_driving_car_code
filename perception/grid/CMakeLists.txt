@@ -17,6 +17,7 @@ find_package(catkin REQUIRED COMPONENTS
 #set(ROS_BUILD_TYPE RelWithDebInfo)
 
 #rosbuild_init()
+catkin_package()
 
 #set the default path for built executables to the "bin" directory
 #set(EXECUTABLE_OUTPUT_PATH ${PROJECT_SOURCE_DIR}/bin)

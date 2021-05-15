@@ -26,6 +26,7 @@ find_package(catkin REQUIRED COMPONENTS
 #rosbuild_genmsg()
 #uncomment if you have defined services
 #rosbuild_gensrv()
+catkin_package()
 
 include_directories(
   include
@@ -34,3 +35,4 @@ include_directories(
   ${catkin_INCLUDE_DIRS}
 )
 add_library(poly_traj src/keepVelocityTrajSet.cpp src/keep_lane_traj_set.cpp src/keepLaneAndVelocitySet2D.cpp src/keepLaneAndTrackPointSet2D.cpp src/trackPointTrajSet.cpp src/polyTraj.cpp src/polyTraj2D.cpp src/rootTraj.cpp src/horner.cpp)
+add_dependencies(poly_traj ${catkin_EXPORTED_TARGETS})

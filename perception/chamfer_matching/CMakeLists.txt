@@ -9,6 +9,8 @@ find_package(catkin REQUIRED COMPONENTS
 #include($ENV{ROS_ROOT}/core/rosbuild/rosbuild.cmake)
 #set(ROS_BUILD_TYPE RelWithDebInfo)
 #rosbuild_init()
+catkin_package()
+
 include_directories(
   include
   #../dgcglobal/include

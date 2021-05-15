@@ -165,7 +165,7 @@ void read_parameters()
 int main(int argc, char **argv) {
 
   ros::init(argc, argv, "vehiclesim");
-  nh_ = new ros::NodeHandle("/driving");
+  nh_ = new ros::NodeHandle("driving");
   vehicle.reset();
   vehicle.set_passat_params();
 

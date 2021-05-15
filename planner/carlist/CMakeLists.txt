@@ -23,6 +23,7 @@ find_package(catkin REQUIRED COMPONENTS
 #set(EXECUTABLE_OUTPUT_PATH ${PROJECT_SOURCE_DIR}/bin)
 #set the default path for built libraries to the "lib" directory
 #set(LIBRARY_OUTPUT_PATH ${PROJECT_SOURCE_DIR}/lib)
+catkin_package()
 
 #uncomment if you have defined messages
 #rosbuild_genmsg()
@@ -35,3 +36,4 @@ include_directories(
   ${catkin_INCLUDE_DIRS}
 )
 add_library(${PROJECT_NAME} src/carlist.cpp)
+add_dependencies(${PROJECT_NAME} ${catkin_EXPORTED_TARGETS})

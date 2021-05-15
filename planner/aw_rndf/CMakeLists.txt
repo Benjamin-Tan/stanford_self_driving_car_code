@@ -33,6 +33,7 @@ find_package(catkin REQUIRED COMPONENTS
 #rosbuild_gensrv()
 
 #include($ENV{ROS_ROOT}/core/rosbuild/FindPkgConfig.cmake)
+catkin_package()
 
   # ftgl + freetype
 #pkg_check_modules(FTGL REQUIRED ftgl)
@@ -54,4 +55,4 @@ include_directories(
 )
 add_library(aw_rndf src/aw_CheckpointList.cpp src/aw_Mission.cpp src/aw_SpeedLimitList.cpp src/aw_checkPoint.cpp src/aw_exit.cpp src/aw_lane.cpp src/aw_laneSegment.cpp src/aw_netElement.cpp src/aw_perimeter.cpp src/aw_perimeterPoint.cpp src/aw_roadNetwork.cpp src/aw_segment.cpp src/aw_spot.cpp src/aw_stop.cpp src/aw_SpeedLimit.cpp src/aw_StringTools.cpp src/aw_wayPoint.cpp src/aw_zone.cpp src/aw_laneQuadTree.cpp src/aw_roadNetworkSearch.cpp src/aw_intersection.cpp src/aw_trafficLight.cpp src/aw_crosswalk.cpp)
 add_library(aw_rndf src/aw_roadNetworkGL.cpp src/aw_trafficLightGL.cpp)
-target_link_libraries(aw_rndf CGAL::CGAL)
+target_link_libraries(aw_rndf CGAL::CGAL GL aw_geometry gl_support textures)

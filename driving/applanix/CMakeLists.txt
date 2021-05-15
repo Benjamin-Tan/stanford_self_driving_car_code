@@ -7,7 +7,6 @@ find_package(catkin REQUIRED COMPONENTS
   roscpp
   std_msgs
   message_generation
-  rosconsole
 )
 #include($ENV{ROS_ROOT}/core/rosbuild/rosbuild.cmake)
 
@@ -56,11 +55,17 @@ include_directories(
   ../lltransform/include
   ${catkin_INCLUDE_DIRS}
 )
-add_executable(applanix src/applanix.cc src/applanixcore.cc)
-target_link_libraries(applanix ${Z} ${catkin_LIBRARIES} ${DRIVING_COMMON} ${DGCGLOBAL} ${LLTRANSFORM})
-#rosbuild_add_executable(applanix_logger src/applanix_logger.cc src/applanixcore.cc)
-#target_link_libraries(applanix_logger z)
-add_executable(fake_applanix src/fake_applanix.cc)
-target_link_libraries(fake_applanix ${Z} ${catkin_LIBRARIES} ${DRIVING_COMMON} ${DGCGLOBAL} ${LLTRANSFORM})
-#rosbuild_add_executable(applanix_integrate src/applanix_integrate.cc)
-#target_link_libraries(applanix_integrate z)
+if (DRIVING_COMMON AND LLTRANSFORM AND DGCGLOBAL AND Z)
+  add_executable(applanix src/applanix.cc src/applanixcore.cc)
+  add_dependencies(applanix ${${PROJECT_NAME}_EXPORTED_TARGETS} ${localize_EXPORTED_TARGETS} ${catkin_EXPORTED_TARGETS})
+  target_link_libraries(applanix ${Z} ${catkin_LIBRARIES} ${DRIVING_COMMON} ${DGCGLOBAL} ${LLTRANSFORM})
+  #rosbuild_add_executable(applanix_logger src/applanix_logger.cc src/applanixcore.cc)
+  #target_link_libraries(applanix_logger z)
+  add_executable(fake_applanix src/fake_applanix.cc)
+  add_dependencies(fake_applanix ${${PROJECT_NAME}_EXPORTED_TARGETS} ${localize_EXPORTED_TARGETS} ${catkin_EXPORTED_TARGETS})
+  target_link_libraries(fake_applanix ${Z} ${catkin_LIBRARIES} ${DRIVING_COMMON} ${DGCGLOBAL} ${LLTRANSFORM})
+  #rosbuild_add_executable(applanix_integrate src/applanix_integrate.cc)
+  #target_link_libraries(applanix_integrate z)
+else()
+  message(${PROJECT_NAME} " not build, missing dependencies")
+endif()

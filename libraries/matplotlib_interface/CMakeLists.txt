@@ -29,6 +29,7 @@ find_package(catkin REQUIRED COMPONENTS
 #rosbuild_gensrv()
 
 #common commands for building c++ executables and libraries
+catkin_package()
 
 #target_link_libraries(${PROJECT_NAME} another_library)
 #rosbuild_link_boost(${PROJECT_NAME} thread)
