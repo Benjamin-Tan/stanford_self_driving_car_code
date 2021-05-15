@@ -33,7 +33,7 @@
 #include <point_cloud_mapping/sample_consensus/sac_model_circle.h>
 #include <point_cloud_mapping/geometry/nearest.h>
 
-#include <cminpack.h>
+#include <cminpack-1/cminpack.h>
 
 #define SQR(a) ((a)*(a))
 
@@ -183,7 +183,7 @@ namespace sample_consensus
 	double cx = model_coefficients[0];
 	double cy = model_coefficients[1];
 	double r =  model_coefficients[2];
-	for(size_t i=0;i<cloud_->get_points_size();i++) {
+	for(size_t i=0;i<cloud_->points.size();i++) {
 		double dx = cloud_->points[i].x - cx;
 		double dy = cloud_->points[i].y - cy;
 		double a = sqrt( SQR(r) / ( SQR(dx) + SQR(dy) ));

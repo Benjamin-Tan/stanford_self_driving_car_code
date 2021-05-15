@@ -185,13 +185,13 @@ void VelodyneClient::getParamTransform(std::string key, dgc::dgc_transform_t& tr
   tr[3][1] = 0;
   tr[3][2] = 0;
   tr[3][3] = 1;
-  btMatrix3x3 R = transform.getBasis();
+  tf::Matrix3x3 R = transform.getBasis();
   for (int32_t r = 0; r < 3; r++) {
     for (int32_t c = 0; c < 3; c++) {
       tr[r][c] = R[r][c];
     }
   }
-  btVector3 t = transform.getOrigin();
+  tf::Vector3 t = transform.getOrigin();
   tr[0][3] = t[0];
   tr[1][3] = t[1];
   tr[2][3] = t[2];
@@ -445,8 +445,8 @@ void VelodyneClient::labelObstaclePointsRings() {
               if (bin_[l1][b].beam[m]->valid) {
                 float range1 = bin_[l1][b].beam[m]->range;
                 float threshold = rings_->factor(l) * range1 * range1 * factor;
-                if (fabs(range1 - range0) < threshold) {
-                  bin_[l0][b].beam[k]->obstacle = TRUE;
+                if (std::fabs(range1 - range0) < threshold) {
+                  bin_[l0][b].beam[k]->obstacle = true;
                   //                  bin[l1][b].beam[m]->obstacle = TRUE;
                   //                  c++;
                   //                  break;

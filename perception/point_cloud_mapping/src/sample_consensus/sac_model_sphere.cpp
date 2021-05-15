@@ -34,7 +34,7 @@
 #include <point_cloud_mapping/geometry/nearest.h>
 #include <Eigen/LU>
 
-#include <cminpack.h>
+#include <cminpack-1/cminpack.h>
 
 namespace sample_consensus
 {

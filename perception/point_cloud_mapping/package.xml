@@ -1,4 +1,6 @@
-<package>
+<package format="2">
+  <name>point_cloud_mapping</name>
+  <version>0.0.0</version>
   <description>
 
 <p>
@@ -37,23 +39,13 @@
 </p>
 
   </description>
-
-  <author>Radu Bogdan Rusu and contributors</author>
+  <maintainer email="radu@todo.todo">Radu Bogdan Rusu and contributors</maintainer>
   <license>BSD</license>
   <url>http://pr.willowgarage.com</url>
-  <review status="experimental" notes="beta"/>
 
-  <depend package="roscpp" />
-  <depend package="sensor_msgs" />
-  <depend package="visualization_msgs" />
-  <depend package="angles" />
-  <depend package="eigen" />
-  <depend package="cminpack" />
-  <depend package="tf" />
-  <depend package="ANN" />
-  <depend package="FLANN" />
+  <buildtool_depend>catkin</buildtool_depend>
+  <build_depend>roscpp</build_depend>
+  <build_export_depend>roscpp</build_export_depend>
+  <exec_depend>roscpp</exec_depend>
 
-  <export>
-    <cpp cflags="-I${prefix}/include" lflags="-Wl,-rpath,${prefix}/lib -L${prefix}/lib -lcloud_geometry -lcloud_io -lsample_consensus -lcloud_kdtree -lcloud_octree -lnormal_estimation_in_proc" />
-  </export>
 </package>

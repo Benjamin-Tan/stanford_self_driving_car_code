@@ -114,8 +114,8 @@ Object* createObjectFromTrack(const Track& tr, const MatrixXf& cloud_classificat
   size_t max_pts = 0;
   size_t idx = 0;
   for(size_t i=0; i<tr.clouds_.size(); ++i) {
-    if(tr.clouds_[i]->get_points_size() > max_pts) {
-      max_pts = tr.clouds_[i]->get_points_size();
+    if(tr.clouds_[i]->points.size() > max_pts) {
+      max_pts = tr.clouds_[i]->points.size();
       idx = i;
     }
   }
@@ -234,7 +234,7 @@ void drawGrid(double center_x, double center_y) {
 
 Object* getDescriptorsForCloud(const PointCloud& cloud, const vector<Descriptor3D*>& features) {
   // -- Set up for using descriptors_3d
-  vector<int>* ptr = new vector<int>(cloud.get_points_size());
+  vector<int>* ptr = new vector<int>(cloud.points.size());
   for(size_t i=0; i<ptr->size(); ++i) {
     ptr->at(i) = i;
   }
@@ -640,8 +640,8 @@ void motion(int x, int y)
 
 double computeXYDist(const sensor_msgs::PointCloud& cloud) {
   float max_dist2 = -FLT_MAX;
-  for(size_t i=0; i<cloud.get_points_size(); ++i) {
-    for(size_t j=0; j<cloud.get_points_size(); ++j) {
+  for(size_t i=0; i<cloud.points.size(); ++i) {
+    for(size_t j=0; j<cloud.points.size(); ++j) {
       float dist2 = pow(cloud.points[i].x - cloud.points[j].x, 2) + pow(cloud.points[i].y - cloud.points[j].y, 2);
       if(dist2 > max_dist2)
 	max_dist2 = dist2;
@@ -654,17 +654,17 @@ double computeRadius(const sensor_msgs::PointCloud& cloud) {
   double x = 0;
   double y = 0;
   double z = 0;
-  for(size_t i=0; i<cloud.get_points_size(); ++i) {
+  for(size_t i=0; i<cloud.points.size(); ++i) {
     x += cloud.points[i].x;
     y += cloud.points[i].y;
     z += cloud.points[i].z;
   }
-  x /= (double)cloud.get_points_size();
-  y /= (double)cloud.get_points_size();
-  z /= (double)cloud.get_points_size();
+  x /= (double)cloud.points.size();
+  y /= (double)cloud.points.size();
+  z /= (double)cloud.points.size();
 
   double max_dist = 0;
-  for(size_t i=0; i<cloud.get_points_size(); ++i) {
+  for(size_t i=0; i<cloud.points.size(); ++i) {
     double dist = sqrt(pow(cloud.points[i].x - x, 2) + pow(cloud.points[i].y - y, 2) + pow(cloud.points[i].z - z, 2));
     if(dist > max_dist)
       max_dist = dist;
@@ -675,7 +675,7 @@ double computeRadius(const sensor_msgs::PointCloud& cloud) {
 
 float computeHeight(const sensor_msgs::PointCloud& cloud) {
   // -- Sort based on height.
-  vector< pair<float, size_t> > height_idx(cloud.get_points_size());
+  vector< pair<float, size_t> > height_idx(cloud.points.size());
   for(size_t i=0; i<height_idx.size(); ++i) {
     height_idx[i].first = cloud.points[i].z;
     height_idx[i].second = i;
@@ -718,7 +718,7 @@ void draw_info_box(void)
   // -- Z height debugging.
 //   float max_z = -FLT_MAX;
 //   float min_z = FLT_MAX;
-//   for(size_t i=0; i<g_cloud->get_points_size(); ++i) {
+//   for(size_t i=0; i<g_cloud->points.size(); ++i) {
 //     if(g_cloud->points[i].z > max_z)
 //       max_z = g_cloud->points[i].z;
 //     if(g_cloud->points[i].z < min_z)
@@ -744,7 +744,7 @@ void draw_info_box(void)
     renderBitmapString(20, 180, GLUT_BITMAP_HELVETICA_18, str);
   }
   
-  sprintf(str, "%d points", g_cloud->get_points_size());
+  sprintf(str, "%d points", g_cloud->points.size());
   renderBitmapString(20, 80, GLUT_BITMAP_HELVETICA_18, str);
  
   sprintf(str, "Track %d of %d", g_track_num+1, g_tm.tracks_.size());
@@ -838,7 +838,7 @@ void getCloudStats(const PointCloud& cloud, double* x, double* y, double* z, dou
     *min_z = FLT_MAX;
   if(max_z)
     *max_z = FLT_MIN;
-  for(size_t i=0; i<cloud.get_points_size(); ++i) {
+  for(size_t i=0; i<cloud.points.size(); ++i) {
     *x += cloud.points[i].x;
     *y += cloud.points[i].y;
     *z += cloud.points[i].z;
@@ -847,10 +847,10 @@ void getCloudStats(const PointCloud& cloud, double* x, double* y, double* z, dou
     if(max_z && cloud.points[i].z > *max_z)
       *max_z = cloud.points[i].z;
   }
-  if(cloud.get_points_size() > 0) {
-    *x /= cloud.get_points_size();
-    *y /= cloud.get_points_size();
-    *z /= cloud.get_points_size();
+  if(cloud.points.size() > 0) {
+    *x /= cloud.points.size();
+    *y /= cloud.points.size();
+    *z /= cloud.points.size();
   }
   else {
     *x = 0;
@@ -889,9 +889,9 @@ void display(void)
   drawGrid(0,0);
   
   // -- Draw the point cloud.
-  for(size_t i=0; i<g_cloud->get_points_size(); ++i) {
-    assert(g_cloud->get_channels_size() > 0);
-    assert(g_cloud->channels[0].get_values_size() == g_cloud->get_points_size());
+  for(size_t i=0; i<g_cloud->points.size(); ++i) {
+    assert(g_cloud->channels.size() > 0);
+    assert(g_cloud->channels[0].values.size() == g_cloud->points.size());
       
     if(!g_display_intensity) { 
       double u = (g_cloud->points[i].z - min_z) / 3.0;
@@ -1048,7 +1048,7 @@ void useTrackManager(string filename) {
 //       double mean_radius = 0; //Max distance from the centroid.
       
 //       for(size_t j=0; j<track.clouds_.size(); ++j) {
-// 	mean_numpts += track.clouds_[j]->get_points_size();
+// 	mean_numpts += track.clouds_[j]->points.size();
 // 	mean_radius += computeRadius(*track.clouds_[j]);
 //       }
 //       mean_numpts /= (double)track.clouds_.size();

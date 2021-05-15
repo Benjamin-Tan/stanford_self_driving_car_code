@@ -1,0 +1,17 @@
+<package format="2">
+  <name>cluster_descriptors</name>
+  <version>0.0.0</version>
+  <description>cluster_descriptors</description>
+  <maintainer email="stanforddriving@todo.todo">stanforddriving</maintainer>
+  
+  <license>BSD</license>
+  <url>http://ros.org/wiki/cluster_descriptors</url>
+
+  <buildtool_depend>catkin</buildtool_depend>
+  <build_depend>roscpp</build_depend>
+  <build_export_depend>roscpp</build_export_depend>
+  <exec_depend>roscpp</exec_depend>
+  
+</package>
+
+

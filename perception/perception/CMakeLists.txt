@@ -8,6 +8,7 @@ find_package(catkin REQUIRED COMPONENTS
   std_msgs
   message_generation
   driving_common
+  pcl_ros
 )
 #include($ENV{ROS_ROOT}/core/rosbuild/rosbuild.cmake)
 
@@ -49,13 +50,58 @@ catkin_package(
 #rosbuild_genmsg()
 #uncomment if you have defined services
 #rosbuild_gensrv()
+find_package(Eigen3 REQUIRED)
+
 include_directories(
   include
+  ../../driving/dgcglobal/include
+  ../../driving/driving_common/include
+  ../grid/include
+  ../velodyne/include
+  ../../planner/aw_rndf/include
+  ../../driving/asyncwriter/include
+  ../../driving/gls/include
+  ../../driving/lltransform/include
+  ../multibooster/include
+  ../../libraries/qpOASES-3.2.0/include
+  ../pipeline/include
+  ../cluster_descriptors/include
+  ../linear_kalman_filter/include
+  ../point_cloud_mapping/include
+  ${EIGEN3_INCLUDE_DIR}
   ${catkin_INCLUDE_DIRS}
 )
 
-# rosbuild_add_executable(perception src/main.cpp src/perception.cpp src/veloGroundFinder.cpp src/utils.cc src/kalman_multitracker.cpp)
-# rosbuild_add_executable(perception src/line.cc src/ray_tracing.cc src/integration.cc src/scan.cc src/multibooster_support2.cpp)
-# rosbuild_add_executable(perception src/tracker.cc src/box.cc src/segment.cpp src/obstacle.cpp src/veloClient.cpp)
-# rosbuild_add_executable(perception src/tracked_obstacle.cpp src/radar.cc src/velodyne_rings.cpp src/pointCloudClient.cpp)
+add_executable(perception src/main.cpp src/perception.cpp src/veloGroundFinder.cpp src/utils.cc src/kalman_multitracker.cpp)
+add_executable(perception src/line.cc src/ray_tracing.cc src/integration.cc src/scan.cc src/multibooster_support2.cpp)
+add_executable(perception src/tracker.cc src/box.cc src/segment.cpp src/obstacle.cpp src/veloClient.cpp)
+add_executable(perception src/tracked_obstacle.cpp src/radar.cc src/velodyne_rings.cpp src/pointCloudClient.cpp)
+add_dependencies(perception 
+                  dgcglobal 
+                  driving_common 
+                  grid 
+                  aw_rndf 
+                  velocore 
+                  velo_support
+                  velodyne_nodelets
+                  gls
+                  lltransform
+                  multibooster
+                  pipeline
+                  cluster_descriptors
+                  linear_kalman_filter)
+target_link_libraries(perception ${catkin_LIBRARIES} 
+                  dgcglobal 
+                  driving_common 
+                  grid 
+                  aw_rndf 
+                  velocore 
+                  velo_support
+                  gls
+                  lltransform
+                  multibooster
+                  pipeline
+                  cluster_descriptors
+                  linear_kalman_filter)
+                  
 # cut from above command: src/laser_segment.cpp

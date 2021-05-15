@@ -463,7 +463,7 @@ bool track_manager::deserializePointCloud(istream& istrm, PointCloud* cloud) {
 
   float* buf = (float*)malloc(sizeof(float)*num_points*3);
   istrm.read((char*)buf, sizeof(float)*num_points*3);
-  cloud->set_points_size(num_points);
+  cloud->points.resize(num_points);
   for(size_t i=0; i<num_points; ++i) {
     cloud->points[i].x = buf[i*3];
     cloud->points[i].y = buf[i*3+1];
@@ -478,16 +478,16 @@ void track_manager::serializePointCloud(const sensor_msgs::PointCloud& cloud, os
   out << "serialization_version_" << endl;
   out << POINTCLOUD_SERIALIZATION_VERSION << endl;
   out << "num_points" << endl;
-  out << cloud.get_points_size() << endl;
+  out << cloud.points.size() << endl;
   out << "points" << endl;
 
-  float* buf = (float*)malloc(sizeof(float)*cloud.get_points_size()*3);
-  for(size_t i=0; i<cloud.get_points_size(); ++i) {
+  float* buf = (float*)malloc(sizeof(float)*cloud.points.size()*3);
+  for(size_t i=0; i<cloud.points.size(); ++i) {
     buf[i*3] = cloud.points[i].x;
     buf[i*3+1] = cloud.points[i].y;
     buf[i*3+2] = cloud.points[i].z;
   }
-  out.write((char*)buf, sizeof(float)*cloud.get_points_size()*3);
+  out.write((char*)buf, sizeof(float)*cloud.points.size()*3);
   free(buf);
 }
 
@@ -495,10 +495,10 @@ void track_manager::serializePointCloud(const sensor_msgs::PointCloud& cloud, os
 bool track_manager::cloudsEqual(const PointCloud& c1, const PointCloud& c2) {
 
   // -- Check the points.
-  if(c1.get_points_size() != c2.get_points_size())
+  if(c1.points.size() != c2.points.size())
     return false;
 
-  for(size_t i=0; i<c1.get_points_size(); ++i) {
+  for(size_t i=0; i<c1.points.size(); ++i) {
     if(c1.points[i].x != c2.points[i].x)
       return false;
     if(c1.points[i].y != c2.points[i].y)
@@ -508,13 +508,13 @@ bool track_manager::cloudsEqual(const PointCloud& c1, const PointCloud& c2) {
   }
 
   // -- Check the channels.
-  if(c1.get_channels_size() != c2.get_channels_size())
+  if(c1.channels.size() != c2.channels.size())
     return false;
 
-  for(size_t i=0; i<c1.get_channels_size(); ++i) {
-    if(c1.channels[i].get_values_size() != c1.channels[i].get_values_size())
+  for(size_t i=0; i<c1.channels.size(); ++i) {
+    if(c1.channels[i].values.size() != c1.channels[i].values.size())
       return false;
-    for(size_t j=0; j<c1.channels[i].get_values_size(); ++j) {
+    for(size_t j=0; j<c1.channels[i].values.size(); ++j) {
       if(c1.channels[i].values[j] != c2.channels[i].values[j])
 	return false;
     }

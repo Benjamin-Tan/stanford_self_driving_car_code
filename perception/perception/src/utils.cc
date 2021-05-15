@@ -60,10 +60,10 @@ void dgc_transform_integrate_pose(dgc_transform_t t, dgc_pose_t pose) {
 
 int inside_car(float x, float y, dgc_pose_t robot) {
   if (hypotf(robot.x - x, robot.y - y) < 3.0) {
-    return (TRUE);
+    return 1;
   }
   else {
-    return (FALSE);
+    return 0;
   }
 }
 

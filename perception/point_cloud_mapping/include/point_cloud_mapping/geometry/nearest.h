@@ -33,6 +33,7 @@
 #ifndef _CLOUD_GEOMETRY_NEAREST_H_
 #define _CLOUD_GEOMETRY_NEAREST_H_
 
+#include <ros/ros.h>
 // ROS includes
 #include <sensor_msgs/PointCloud.h>
 #include <geometry_msgs/PointStamped.h>

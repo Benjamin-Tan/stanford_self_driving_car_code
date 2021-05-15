@@ -47,7 +47,7 @@ using namespace sensor_msgs;
 // Horrible copy from track_visualizer.cpp.
 Object* getDescriptorsForCloud(const PointCloud& cloud, const vector<Descriptor3D*>& features) {
   // -- Set up for using descriptors_3d
-  vector<int>* ptr = new vector<int>(cloud.get_points_size());
+  vector<int>* ptr = new vector<int>(cloud.points.size());
   for(size_t i=0; i<ptr->size(); ++i) {
     ptr->at(i) = i;
   }

@@ -32,7 +32,7 @@
 
 #ifndef _CLOUD_IO_CLOUDIO_H_
 #define _CLOUD_IO_CLOUDIO_H_
-
+#include <ros/ros.h>
 // ROS includes
 #include <sensor_msgs/PointCloud.h>
 

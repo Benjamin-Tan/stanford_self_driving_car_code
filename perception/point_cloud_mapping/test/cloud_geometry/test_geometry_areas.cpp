@@ -62,7 +62,7 @@ TEST (Geometry, PolygonAreas)
   p4.y = 0.5;
   p4.z = 0;
 
-  poly.set_points_size(4);
+  poly.points.resize(4);
   poly.points[0]=p1;
   poly.points[1]=p2;
   poly.points[2]=p3;

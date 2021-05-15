@@ -43,6 +43,7 @@
 #include <opencv/cv.h>
 #include <opencv/highgui.h>
 #include <opencv/cvaux.hpp>
+#include <opencv2/objdetect.hpp>
 #include <Eigen/Eigen>
 #include <pipeline/pipeline.h>
 #include <tr1/random>

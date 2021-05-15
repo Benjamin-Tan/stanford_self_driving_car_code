@@ -42,7 +42,7 @@
 #include <utils.h>
 #include <lltransform.h>
 #include <opencv2/core/core.hpp>
-#include <highgui.h>
+#include <opencv2/highgui.hpp>
 
 using namespace std;
 using namespace std::tr1;
@@ -349,7 +349,7 @@ void Perception::integrateSensors(const pcl::PointCloud<pcl::PointXYZI>& cloud) 
      static double time0;
      static double delta_s;
 
-     time0 = cloud.header.stamp.toSec();
+     time0 = cloud.header.stamp * 1e-6f; // assuming us
      delta_s = time0 - last_integration_time_;
 
      drc::GlobalPose current_pose;
@@ -379,7 +379,7 @@ void Perception::integrateSensors(const pcl::PointCloud<pcl::PointXYZI>& cloud) 
      counter_++;
 
      if (settings_.extract_dynamic) {
-       tracker_->trackFrame(cloud.header.stamp.toSec());
+       tracker_->trackFrame(cloud.header.stamp*1e-6f); // assuming us
      }
 
      pthread_mutex_lock(&publish_mutex);

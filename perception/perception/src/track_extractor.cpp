@@ -283,9 +283,9 @@ void dgcToEigen(const vector<point3d_t>& points, boost::shared_ptr<MatrixXf> clo
 
 boost::shared_ptr<sensor_msgs::PointCloud> dgcToRos(const vector<point3d_t>& dgc) {
   boost::shared_ptr<sensor_msgs::PointCloud> ros(new sensor_msgs::PointCloud());
-  ros->set_points_size(dgc.size());
-  ros->set_channels_size(1);
-  ros->channels[0].set_values_size(dgc.size());
+  ros->points.resize(dgc.size());
+  ros->channels.resize(1);
+  ros->channels[0].values.resize(dgc.size());
   for(size_t i = 0; i < dgc.size(); ++i) {
     ros->points[i].x = dgc[i].x;
     ros->points[i].y = dgc[i].y;
@@ -301,7 +301,7 @@ bool validTrack(const Track& track) {
 
   bool enough_points = false;
   for(size_t i = 0; i < track.clouds_.size(); ++i) {
-    if(track.clouds_[i]->get_points_size() > 75) {
+    if(track.clouds_[i]->points.size() > 75) {
       enough_points = true;
       break;
     }

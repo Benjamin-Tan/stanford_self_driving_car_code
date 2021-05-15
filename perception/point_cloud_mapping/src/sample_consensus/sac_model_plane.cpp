@@ -168,10 +168,10 @@ namespace sample_consensus
   {
     // Allocate enough space
     projected_points.points.resize (inliers.size ());
-    projected_points.set_channels_size (cloud_->get_channels_size ());
+    projected_points.channels.resize (cloud_->channels.size ());
 
     // Create the channels
-    for (unsigned int d = 0; d < projected_points.get_channels_size (); d++)
+    for (unsigned int d = 0; d < projected_points.channels.size (); d++)
     {
       projected_points.channels[d].name = cloud_->channels[d].name;
       projected_points.channels[d].values.resize (inliers.size ());
@@ -200,7 +200,7 @@ namespace sample_consensus
       projected_points.points[i].y = cloud_->points.at (inliers.at (i)).y - distance_to_plane * model_coefficients.at (1);
       projected_points.points[i].z = cloud_->points.at (inliers.at (i)).z - distance_to_plane * model_coefficients.at (2);
       // Copy the other attributes
-      for (unsigned int d = 0; d < projected_points.get_channels_size (); d++)
+      for (unsigned int d = 0; d < projected_points.channels.size (); d++)
         projected_points.channels[d].values[i] = cloud_->channels[d].values[inliers.at (i)];
     }
   }

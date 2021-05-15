@@ -65,11 +65,11 @@ void PlaneFittingCloudOrienter::setInputIntensity(boost::shared_ptr<Eigen::Vecto
   input_intensity_ = intensity;
 }
 
-shared_ptr<MatrixXf> PlaneFittingCloudOrienter::getOutputCloud() const {
+boost::shared_ptr<MatrixXf> PlaneFittingCloudOrienter::getOutputCloud() const {
   return output_cloud_;
 }
 
-shared_ptr<VectorXf> PlaneFittingCloudOrienter::getOutputIntensity() const {
+boost::shared_ptr<VectorXf> PlaneFittingCloudOrienter::getOutputIntensity() const {
   return input_intensity_;
 }
 
@@ -152,7 +152,7 @@ void PlaneFittingCloudOrienter::_compute() {
   rotation(0,1) = sin(theta);
   rotation(1,0) = -sin(theta);
 
-  output_cloud_ = shared_ptr<MatrixXf>(new MatrixXf());
+  output_cloud_ = boost::shared_ptr<MatrixXf>(new MatrixXf());
   *output_cloud_ = *input_cloud_ * rotation;
 
   VectorXf foo = fitPlane(*output_cloud_);
@@ -197,11 +197,11 @@ void CloudOrienter::setInputIntensity(boost::shared_ptr<Eigen::VectorXf> intensi
   input_intensities_ = intensity;
 }
 
-shared_ptr<MatrixXf> CloudOrienter::getOutputCloud() const {
+boost::shared_ptr<MatrixXf> CloudOrienter::getOutputCloud() const {
   return output_cloud_;
 }
 
-shared_ptr<VectorXf> CloudOrienter::getOutputIntensity() const {
+boost::shared_ptr<VectorXf> CloudOrienter::getOutputIntensity() const {
   return input_intensities_;
 }
 
@@ -269,7 +269,7 @@ void CloudOrienter::_compute() {
   assert(abs(basis.col(2).norm() - 1) < 1e-4);
 
   // -- Rotate and set the output_cloud_.
-  output_cloud_ = shared_ptr<MatrixXf>(new MatrixXf);
+  output_cloud_ = boost::shared_ptr<MatrixXf>(new MatrixXf);
   *output_cloud_ = points * basis;
   assert(output_cloud_->rows() == input_cloud_->rows());
 }
@@ -377,7 +377,7 @@ void HoughCloudOrienter::_compute() {
   assert(abs(basis.col(2).norm() - 1) < 1e-4);
 
   // -- Rotate and set the output_cloud_.
-  output_cloud_ = shared_ptr<MatrixXf>(new MatrixXf);
+  output_cloud_ = boost::shared_ptr<MatrixXf>(new MatrixXf);
   *output_cloud_ = points * basis;
   assert(output_cloud_->rows() == input_cloud_->rows());
 }
@@ -387,7 +387,7 @@ void HoughCloudOrienter::_compute() {
 * CloudSpinner
 **************************************************************/
 
-CloudSpinner::CloudSpinner(shared_ptr<PointCloudInterface> orienter) :
+CloudSpinner::CloudSpinner(boost::shared_ptr<PointCloudInterface> orienter) :
   ComputeNode(),
   orienter_(orienter)
 {
@@ -406,7 +406,7 @@ void CloudSpinner::_compute() {
   assert(orienter_->getOutputCloud());
   MatrixXf& xyz = *orienter_->getOutputCloud();
 
-  spin_coords_ = shared_ptr<MatrixXf>(new MatrixXf(xyz.rows(), 2));
+  spin_coords_ = boost::shared_ptr<MatrixXf>(new MatrixXf(xyz.rows(), 2));
   for(int i = 0; i < xyz.rows(); ++i) {
     spin_coords_->coeffRef(i, 0) = sqrt(xyz(i, 0) * xyz(i, 0) + xyz(i, 1) * xyz(i, 1));
     spin_coords_->coeffRef(i, 1) = xyz(i, 2);
@@ -437,7 +437,7 @@ int SpinImage::getDescriptorLength() const {
   return num_rows_ * num_cols_;
 }
 
-shared_ptr<VectorXf> SpinImage::_getDescriptor() const {
+boost::shared_ptr<VectorXf> SpinImage::_getDescriptor() const {
   return vectorized_spin_image_;
 }
 
@@ -455,7 +455,7 @@ void SpinImage::_compute() {
   assert(spinner_->spin_coords_->rows() > 0);
   MatrixXf& spun = *spinner_->spin_coords_;
 
-  vectorized_spin_image_ = shared_ptr<VectorXf>(new VectorXf());
+  vectorized_spin_image_ = boost::shared_ptr<VectorXf>(new VectorXf());
   *vectorized_spin_image_ = VectorXf::Zero(num_rows_ * num_cols_);
   cvZero(ipl_);
   for(int i = 0; i < spun.rows(); ++i) {
@@ -734,7 +734,7 @@ void CloudProjector::_compute() {
 * Whitener
 **************************************************************/
 
-Whitener::Whitener(shared_ptr<DescriptorNode> node) :
+Whitener::Whitener(boost::shared_ptr<DescriptorNode> node) :
   node_(node)
 {
   registerInput(node);
@@ -744,7 +744,7 @@ int Whitener::getDescriptorLength() const {
   return node_->getDescriptorLength();
 }
 
-shared_ptr<VectorXf> Whitener::_getDescriptor() const {
+boost::shared_ptr<VectorXf> Whitener::_getDescriptor() const {
   return whitened_;
 }
 
@@ -757,7 +757,7 @@ void Whitener::_compute() {
   assert(node_->getDescriptor()->rows() > 0);
 
   // -- Set mean to zero.
-  whitened_ = shared_ptr<VectorXf>(new VectorXf());
+  whitened_ = boost::shared_ptr<VectorXf>(new VectorXf());
   *whitened_ = *node_->getDescriptor();
   double mean = whitened_->sum() / (float)whitened_->rows();
   assert(!isnan(mean));
@@ -790,7 +790,7 @@ string Whitener::_getName() const {
 * OrientedBoundingBoxSize
 **************************************************************/
 
-OrientedBoundingBoxSize::OrientedBoundingBoxSize(shared_ptr<PointCloudInterface> orienter) :
+OrientedBoundingBoxSize::OrientedBoundingBoxSize(boost::shared_ptr<PointCloudInterface> orienter) :
   DescriptorNode(),
   orienter_(orienter)
 {
@@ -806,7 +806,7 @@ void OrientedBoundingBoxSize::_compute() {
   assert(cloud.cols() == 3);
   VectorXf min = cloud.colwise().minCoeff();
   VectorXf max = cloud.colwise().maxCoeff();
-  bbox_size_ = shared_ptr<VectorXf>(new VectorXf(3));
+  bbox_size_ = boost::shared_ptr<VectorXf>(new VectorXf(3));
   *bbox_size_ = max - min;
 }
 
@@ -819,7 +819,7 @@ int OrientedBoundingBoxSize::getDescriptorLength() const {
   return 3;
 }
 
-shared_ptr<VectorXf> OrientedBoundingBoxSize::_getDescriptor() const {
+boost::shared_ptr<VectorXf> OrientedBoundingBoxSize::_getDescriptor() const {
   return bbox_size_;
 }
 
@@ -904,7 +904,7 @@ void HogArray::_compute() {
       cerr << _getName() << ": image is smaller than hog window." << endl;
     cvReleaseImage(&img8u_);
     assert(!img8u_);
-    descriptors_ = vector< shared_ptr<VectorXf> >(u_offset_pcts_.size(), shared_ptr<VectorXf>((VectorXf*)NULL)); //Fill all descriptors with NULL pointers.
+    descriptors_ = vector< boost::shared_ptr<VectorXf> >(u_offset_pcts_.size(), boost::shared_ptr<VectorXf>((VectorXf*)NULL)); //Fill all descriptors with NULL pointers.
     return;
   }
   
@@ -934,14 +934,15 @@ void HogArray::_compute() {
   
   // -- Call opencv.
   std::vector<float> result;
-  hog_.compute(img8u_, result, cv::Size(), cv::Size(), coords_); //winStride and padding are set to default
+  cv::Mat m = cv::cvarrToMat(img8u_);  // default additional arguments: don't copy data.
+  hog_.compute(m, result, cv::Size(), cv::Size(), coords_); //winStride and padding are set to default
   
   // -- Put results in vector<VectorXf> from the long concatenation that hog_ produces.
-  descriptors_ = vector< shared_ptr<VectorXf> >(coords_.size());
+  descriptors_ = vector< boost::shared_ptr<VectorXf> >(coords_.size());
   size_t sz = hog_.getDescriptorSize();
   assert(sz != 0);
   for(size_t i=0; i<coords_.size(); i++) {
-    descriptors_[i] = shared_ptr<VectorXf>(new VectorXf(sz));
+    descriptors_[i] = boost::shared_ptr<VectorXf>(new VectorXf(sz));
     for(size_t j = 0; j < sz; ++j) //Copy in the result.
       descriptors_[i]->coeffRef(j) = result[i*sz + j];
   }
@@ -967,7 +968,7 @@ int HogWindow::getDescriptorLength() const {
   return hog_array_->getDescriptorLength();
 }
 
-shared_ptr<VectorXf> HogWindow::_getDescriptor() const {
+boost::shared_ptr<VectorXf> HogWindow::_getDescriptor() const {
   return hog_descriptor_;
 }
 
@@ -1036,7 +1037,7 @@ void HogWindow::_compute() {
 * RandomProjector
 **************************************************************/
 
-// RandomProjector::RandomProjector(const RandomProjector& rp, shared_ptr<DescriptorNode> descriptor) :
+// RandomProjector::RandomProjector(const RandomProjector& rp, boost::shared_ptr<DescriptorNode> descriptor) :
 //   DescriptorNode(),
 //   output_dim_(rp.output_dim_),
 //   seed_(rp.seed_),
@@ -1046,7 +1047,7 @@ void HogWindow::_compute() {
 //   registerInput(descriptor_);
 // }
 
-RandomProjector::RandomProjector(shared_ptr<MatrixXf> projector, shared_ptr<DescriptorNode> descriptor) :
+RandomProjector::RandomProjector(boost::shared_ptr<MatrixXf> projector, boost::shared_ptr<DescriptorNode> descriptor) :
   DescriptorNode(),
   seed_(-1),
   output_dim_(projector->rows()),
@@ -1067,8 +1068,8 @@ RandomProjector::RandomProjector(int output_dim, int seed, boost::shared_ptr<pip
 }
 
 
-shared_ptr<MatrixXf> RandomProjector::generateProjectionMatrix(int input_dim, int output_dim, int seed) {
-  shared_ptr<MatrixXf> projector(new MatrixXf(output_dim, input_dim));
+boost::shared_ptr<MatrixXf> RandomProjector::generateProjectionMatrix(int input_dim, int output_dim, int seed) {
+  boost::shared_ptr<MatrixXf> projector(new MatrixXf(output_dim, input_dim));
   projector->setZero();
   
   // -- Each entry in the projector is drawn from the standard normal.
@@ -1126,18 +1127,18 @@ void RandomProjector::_flush() {
 
 void RandomProjector::_compute() {
   if(descriptor_->getDescriptor()) {
-    projected_descriptor_ = shared_ptr<VectorXf>(new VectorXf());
+    projected_descriptor_ = boost::shared_ptr<VectorXf>(new VectorXf());
     *projected_descriptor_ = (*projector_) * (*descriptor_->getDescriptor());
   }
   else
-    projected_descriptor_ = shared_ptr<VectorXf>((VectorXf*)NULL);
+    projected_descriptor_ = boost::shared_ptr<VectorXf>((VectorXf*)NULL);
 }
  
 /*************************************************************
 * MultiBoosterNode
 **************************************************************/
 
-MultiBoosterNode::MultiBoosterNode(MultiBooster* booster, shared_ptr<MultiBoosterObjectConstructor> constructor) :
+MultiBoosterNode::MultiBoosterNode(MultiBooster* booster, boost::shared_ptr<MultiBoosterObjectConstructor> constructor) :
   response_(VectorXf::Zero(booster->class_map_.size())),
   booster_(booster),
   constructor_(constructor)
@@ -1164,7 +1165,7 @@ void MultiBoosterNode::_compute() {
 * MultiBoosterObjectConstructor
 **************************************************************/
 
-MultiBoosterObjectConstructor::MultiBoosterObjectConstructor(vector< shared_ptr<DescriptorNode> > descriptor_nodes) :
+MultiBoosterObjectConstructor::MultiBoosterObjectConstructor(vector< boost::shared_ptr<DescriptorNode> > descriptor_nodes) :
   descriptor_nodes_(descriptor_nodes),
   object_(NULL)
 {
@@ -1186,7 +1187,7 @@ void MultiBoosterObjectConstructor::_flush() {
 }
 
 void MultiBoosterObjectConstructor::_compute() {
-  //object_ = shared_ptr<Object>(new Object());
+  //object_ = boost::shared_ptr<Object>(new Object());
   object_ = new Object();
   object_->label_ = -2; //unlabeled.
   object_->descriptors_ = vector<descriptor>(descriptor_nodes_.size());

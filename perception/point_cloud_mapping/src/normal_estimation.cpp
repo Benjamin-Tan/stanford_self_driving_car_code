@@ -280,7 +280,7 @@ class NormalEstimation
       // Get the nearest neighbors for all points
       for (int i = 0; i < (int)cloud_normals_.points.size (); i++)
       {
-        vector<float> distances;
+        vector<double> distances;
         kdtree_->nearestKSearch (i, k_, points_indices_[i], distances);
       }
       ROS_INFO ("Nearest neighbors found in %g seconds.\n", (ros::Time::now () - ts).toSec ());

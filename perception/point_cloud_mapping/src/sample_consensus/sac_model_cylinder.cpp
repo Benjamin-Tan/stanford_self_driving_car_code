@@ -35,7 +35,7 @@
 #include <point_cloud_mapping/geometry/point.h>
 #include <point_cloud_mapping/geometry/distances.h>
 
-#include <cminpack.h>
+#include <cminpack-1/cminpack.h>
 
 namespace sample_consensus
 {

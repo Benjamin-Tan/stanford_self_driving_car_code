@@ -57,29 +57,29 @@ namespace cloud_geometry
       // Prepare the data output
       centroid.points.resize (1);
       centroid.points[0].x = centroid.points[0].y = centroid.points[0].z = 0;
-      centroid.channels.resize (points.get_channels_size ());
-      for (unsigned int d = 0; d < points.get_channels_size (); d++)
+      centroid.channels.resize (points.channels.size ());
+      for (unsigned int d = 0; d < points.channels.size (); d++)
       {
         centroid.channels[d].name = points.channels[d].name;
         centroid.channels[d].values.resize (1);
       }
 
       // For each point in the cloud
-      for (unsigned int i = 0; i < points.get_points_size (); i++)
+      for (unsigned int i = 0; i < points.points.size (); i++)
       {
         centroid.points[0].x += points.points[i].x;
         centroid.points[0].y += points.points[i].y;
         centroid.points[0].z += points.points[i].z;
 
-        for (unsigned int d = 0; d < points.get_channels_size (); d++)
+        for (unsigned int d = 0; d < points.channels.size (); d++)
           centroid.channels[d].values[0] += points.channels[d].values[i];
       }
 
-      centroid.points[0].x /= points.get_points_size ();
-      centroid.points[0].y /= points.get_points_size ();
-      centroid.points[0].z /= points.get_points_size ();
-      for (unsigned int d = 0; d < points.get_channels_size (); d++)
-        centroid.channels[d].values[0] /= points.get_points_size ();
+      centroid.points[0].x /= points.points.size ();
+      centroid.points[0].y /= points.points.size ();
+      centroid.points[0].z /= points.points.size ();
+      for (unsigned int d = 0; d < points.channels.size (); d++)
+        centroid.channels[d].values[0] /= points.points.size ();
     }
 
     //////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -94,8 +94,8 @@ namespace cloud_geometry
       // Prepare the data output
       centroid.points.resize (1);
       centroid.points[0].x = centroid.points[0].y = centroid.points[0].z = 0;
-      centroid.channels.resize (points.get_channels_size ());
-      for (unsigned int d = 0; d < points.get_channels_size (); d++)
+      centroid.channels.resize (points.channels.size ());
+      for (unsigned int d = 0; d < points.channels.size (); d++)
       {
         centroid.channels[d].name = points.channels[d].name;
         centroid.channels[d].values.resize (1);
@@ -108,14 +108,14 @@ namespace cloud_geometry
         centroid.points[0].y += points.points.at (indices.at (i)).y;
         centroid.points[0].z += points.points.at (indices.at (i)).z;
 
-        for (unsigned int d = 0; d < points.get_channels_size (); d++)
+        for (unsigned int d = 0; d < points.channels.size (); d++)
           centroid.channels[d].values[0] += points.channels[d].values.at (indices.at (i));
       }
 
       centroid.points[0].x /= indices.size ();
       centroid.points[0].y /= indices.size ();
       centroid.points[0].z /= indices.size ();
-      for (unsigned int d = 0; d < points.get_channels_size (); d++)
+      for (unsigned int d = 0; d < points.channels.size (); d++)
         centroid.channels[d].values[0] /= indices.size ();
     }
 
@@ -496,7 +496,7 @@ namespace cloud_geometry
       for (int i = 0; i < nr_points; i++)                     // Get the nearest neighbors for all the point indices in the bounds
       {
         std::vector<int> nn_indices;
-        std::vector<float> nn_distances;
+        std::vector<double> nn_distances;
         kdtree->nearestKSearch (points.points[i], k, nn_indices, nn_distances);
 
         Eigen::Vector4d plane_parameters;                     // Compute the point normals (nx, ny, nz), surface curvature estimates (c)
@@ -541,7 +541,7 @@ namespace cloud_geometry
       for (int i = 0; i < nr_points; i++)                     // Get the nearest neighbors for all the point indices in the bounds
       {
         std::vector<int> nn_indices;
-        std::vector<float> nn_distances;
+        std::vector<double> nn_distances;
         kdtree->radiusSearch (points.points[i], radius, nn_indices, nn_distances);
 
         Eigen::Vector4d plane_parameters;                     // Compute the point normals (nx, ny, nz), surface curvature estimates (c)
@@ -588,7 +588,7 @@ namespace cloud_geometry
       for (int i = 0; i < nr_points; i++)                     // Get the nearest neighbors for all the point indices in the bounds
       {
         std::vector<int> nn_indices;
-        std::vector<float> nn_distances;
+        std::vector<double> nn_distances;
 
 	ros::Time ts_search = ros::Time::now();
         kdtree->nearestKSearch (points.points[i], k, nn_indices, nn_distances);
@@ -638,7 +638,7 @@ namespace cloud_geometry
       for (int i = 0; i < nr_points; i++)                     // Get the nearest neighbors for all the point indices in the bounds
       {
         std::vector<int> nn_indices;
-        std::vector<float> nn_distances;
+        std::vector<double> nn_distances;
         kdtree->radiusSearch (points.points[i], radius, nn_indices, nn_distances);
 
         Eigen::Vector4d plane_parameters;                     // Compute the point normals (nx, ny, nz), surface curvature estimates (c)
@@ -1065,7 +1065,7 @@ namespace cloud_geometry
       processed.resize (nr_points, false);
 
       std::vector<int> nn_indices;
-      std::vector<float> nn_distances;
+      std::vector<double> nn_distances;
       // Process all points in the indices vector
       for (int i = 0; i < nr_points; i++)
       {
@@ -1159,7 +1159,7 @@ namespace cloud_geometry
       processed.resize (nr_points, false);
 
       std::vector<int> nn_indices;
-      std::vector<float> nn_distances;
+      std::vector<double> nn_distances;
       // Process all points in the indices vector
       for (int i = 0; i < nr_points; i++)
       {

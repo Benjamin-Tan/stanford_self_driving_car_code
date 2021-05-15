@@ -88,7 +88,7 @@ namespace cloud_io
         int remaining_tokens = st.size () - (1 + 3);
         //specified_channel_count = st.size () - 1; // used to be this, fixed below
         specified_channel_count = remaining_tokens; // need this to make ARRAY work
-        points.set_channels_size (remaining_tokens);
+        points.channels.resize(remaining_tokens);
         for (int i = 0; i < remaining_tokens; i++)
         {
           std::string col_type = st.at (i + 4);
@@ -103,10 +103,10 @@ namespace cloud_io
       if (line_type.substr (0, 6) == "POINTS")
       {
         nr_points = atoi (st.at (1).c_str ());
-        points.set_points_size (nr_points);
+        points.points.resize(nr_points);
 
-        for (unsigned int d = 0; d < points.get_channels_size (); d++)
-          points.channels[d].set_values_size (nr_points);
+        for (unsigned int d = 0; d < points.channels.size(); d++)
+          points.channels[d].values.resize(nr_points);
 
         continue;
       }
@@ -128,11 +128,11 @@ namespace cloud_io
       {
         array_width = atoi (st.at (1).c_str ());
         array_height = atoi (st.at (2).c_str ());
-        points.set_channels_size (specified_channel_count + 2);
+        points.channels.resize(specified_channel_count + 2);
         points.channels[specified_channel_count].name = "array_width";
         points.channels[specified_channel_count+1].name = "array_height";
-        points.channels[specified_channel_count].set_values_size (1);
-        points.channels[specified_channel_count+1].set_values_size (1);
+        points.channels[specified_channel_count].values.resize(1);
+        points.channels[specified_channel_count+1].values.resize(1);
         points.channels[specified_channel_count].values[0] = array_width;
         points.channels[specified_channel_count+1].values[0] = array_height;
         continue;

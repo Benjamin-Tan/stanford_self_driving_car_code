@@ -33,6 +33,7 @@
 #ifndef _CLOUD_GEOMETRY_PROJECTIONS_H_
 #define _CLOUD_GEOMETRY_PROJECTIONS_H_
 
+#include <ros/ros.h>
 // ROS includes
 #include <geometry_msgs/Point32.h>
 #include <geometry_msgs/Polygon.h>

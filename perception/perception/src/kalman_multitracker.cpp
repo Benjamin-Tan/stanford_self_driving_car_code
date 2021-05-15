@@ -168,7 +168,7 @@ void KalmanMultiTracker::update(const vector< boost::shared_ptr<Obstacle> >& mea
       // Find the filter with the corresponding measurement.
       // This has bad asymptotic complexity but probably small constant.
       it = tracks_.begin();
-      advance(it, f);
+      std::advance(it, f);
 
       // Run the prediction and update step for this delta_time.
       double delta_time = measurements[m]->time_ - (*it)->filter->timestamp_;

@@ -312,8 +312,8 @@ void convertSpinToRos(const dgc_velodyne_spin& spin, sensor_msgs::PointCloud* cl
   spin_idx->resize(num_pts, 0);
   cloud->header.stamp = ros::Time::now();
   cloud->header.frame_id = "sensor_frame";
-  cloud->set_points_size(num_pts);
-  cloud->set_channels_size(0);
+  cloud->points.resize(num_pts);
+  cloud->channels.resize(0);
   
   size_t idx = 0;
   for(int i = 0; i < spin.num_scans; i++) {
@@ -341,9 +341,9 @@ void convertClustersToRos(const vector< vector<point3d_t> >& clusters,
     vector<point3d_t> cl = clusters[i];
     num_pts += cl.size();
   }
-  cloud->set_points_size(num_pts);
-  cloud->set_channels_size(1);
-  cloud->channels[0].set_values_size(num_pts);
+  cloud->points.resize(num_pts);
+  cloud->channels.resize(1);
+  cloud->channels[0].values.resize(num_pts);
   interest_regions_indices->clear();
   interest_regions_indices->reserve(clusters.size()); // Some clusters may be empty.
 
@@ -404,7 +404,7 @@ void collectDatasetForSpin(const vector< vector<point3d_t> >& clusters, double z
   vector< const vector<int>* > interest_regions_indices;
   convertClustersToRos(clusters, &interest_regions_indices, &cloud);
   cloud_kdtree::KdTree* kdt = new cloud_kdtree::KdTreeANN(cloud);
-//  cout << "cloud pts: " << cloud.get_points_size() << endl;
+//  cout << "cloud pts: " << cloud.points.size() << endl;
   
   // -- Compute cluster features.
   vector<SpectralAnalysis*> delete_me;

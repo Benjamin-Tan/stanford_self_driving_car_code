@@ -50,7 +50,7 @@ TEST (LMedS, SACModelCylinder)
   sensor_msgs::PointCloud points;
   points.points.resize (20);
 
-  points.set_channels_size (3);
+  points.channels.resize (3);
   points.channels[0].name = "nx";
   points.channels[1].name = "ny";
   points.channels[2].name = "nz";
@@ -136,7 +136,7 @@ TEST (RANSAC, SACModelCylinder)
   sensor_msgs::PointCloud points;
   points.points.resize (20);
 
-  points.set_channels_size (3);
+  points.channels.resize (3);
   points.channels[0].name = "nx";
   points.channels[1].name = "ny";
   points.channels[2].name = "nz";
@@ -222,7 +222,7 @@ TEST (MSAC, SACModelCylinder)
   sensor_msgs::PointCloud points;
   points.points.resize (20);
 
-  points.set_channels_size (3);
+  points.channels.resize (3);
   points.channels[0].name = "nx";
   points.channels[1].name = "ny";
   points.channels[2].name = "nz";
@@ -308,7 +308,7 @@ TEST (MLESAC, SACModelCylinder)
   sensor_msgs::PointCloud points;
   points.points.resize (20);
 
-  points.set_channels_size (3);
+  points.channels.resize (3);
   points.channels[0].name = "nx";
   points.channels[1].name = "ny";
   points.channels[2].name = "nz";
@@ -394,7 +394,7 @@ TEST (RRANSAC, SACModelCylinder)
   sensor_msgs::PointCloud points;
   points.points.resize (20);
 
-  points.set_channels_size (3);
+  points.channels.resize (3);
   points.channels[0].name = "nx";
   points.channels[1].name = "ny";
   points.channels[2].name = "nz";
@@ -481,7 +481,7 @@ TEST (RMSAC, SACModelCylinder)
   sensor_msgs::PointCloud points;
   points.points.resize (20);
 
-  points.set_channels_size (3);
+  points.channels.resize (3);
   points.channels[0].name = "nx";
   points.channels[1].name = "ny";
   points.channels[2].name = "nz";

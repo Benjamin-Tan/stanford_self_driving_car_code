@@ -93,7 +93,7 @@ void getCloudStats(const PointCloud& cloud, double* x, double* y, double* z, dou
     *min_z = FLT_MAX;
   if(max_z)
     *max_z = FLT_MIN;
-  for(size_t i=0; i<cloud.get_points_size(); ++i) {
+  for(size_t i=0; i<cloud.points.size(); ++i) {
     *x += cloud.points[i].x;
     *y += cloud.points[i].y;
     *z += cloud.points[i].z;
@@ -102,10 +102,10 @@ void getCloudStats(const PointCloud& cloud, double* x, double* y, double* z, dou
     if(max_z && cloud.points[i].z > *max_z)
       *max_z = cloud.points[i].z;
   }
-  if(cloud.get_points_size() > 0) {
-    *x /= cloud.get_points_size();
-    *y /= cloud.get_points_size();
-    *z /= cloud.get_points_size();
+  if(cloud.points.size() > 0) {
+    *x /= cloud.points.size();
+    *y /= cloud.points.size();
+    *z /= cloud.points.size();
   }
   else {
     *x = 0;
@@ -454,7 +454,7 @@ void draw_info_box(void)
   sprintf(str, "Distance: %f", dist);
   renderBitmapString(20, 100, GLUT_BITMAP_HELVETICA_18, str);
   
-  sprintf(str, "%d points", g_cloud->get_points_size());
+  sprintf(str, "%d points", g_cloud->points.size());
   renderBitmapString(20, 80, GLUT_BITMAP_HELVETICA_18, str);
  
   sprintf(str, "Track %d of %d", g_track_num+1, (int)g_tm.tracks_.size());
@@ -560,9 +560,9 @@ void display(void)
   drawGrid(0,0);
   
   // -- Draw the point cloud.
-  for(size_t i=0; i<g_cloud->get_points_size(); ++i) {
-    assert(g_cloud->get_channels_size() > 0);
-    assert(g_cloud->channels[0].get_values_size() == g_cloud->get_points_size());
+  for(size_t i=0; i<g_cloud->points.size(); ++i) {
+    assert(g_cloud->channels.size() > 0);
+    assert(g_cloud->channels[0].values.size() == g_cloud->points.size());
       
     if(!g_display_intensity) { 
       double u = (g_cloud->points[i].z - min_z) / 3.0;

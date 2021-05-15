@@ -59,7 +59,7 @@ using namespace vlr::rndf;
 
 namespace drc = driving_common;
 
-USING_PART_OF_NAMESPACE_EIGEN;
+// USING_PART_OF_NAMESPACE_EIGEN;
 
 namespace perception {
 

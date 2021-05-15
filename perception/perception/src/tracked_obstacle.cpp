@@ -439,14 +439,14 @@ double computeICPDistance(const sensor_msgs::PointCloud& pc1, const sensor_msgs:
 
   // Accumulate cost as mean distance to closest point in last frame.
   double cost = 0;
-  for(size_t i=0; i<pc2.get_points_size(); ++i) {
+  for(size_t i=0; i<pc2.points.size(); ++i) {
     vector<int> indices;
     vector<float> distances;
     kdt->nearestKSearch(pc2.points[i], 1, indices, distances);
     //      cout << "Point " << i << ": Adding distance of " << distances[0] << endl;
     cost += distances[0];
   }
-  cost /= (double)pc2.get_points_size();
+  cost /= (double)pc2.points.size();
   delete kdt;
   return cost;
 }
@@ -463,16 +463,16 @@ bool icpFilter(Obstacle& obs1, Obstacle& obs2) {
   
   // -- Convert into ROS pointclouds so we can use their kdtree.
   sensor_msgs::PointCloud cloud1;
-  cloud1.set_points_size(pts1.size());
-  cloud1.set_channels_size(0);
+  cloud1.points.resize(pts1.size());
+  cloud1.channels.resize(0);
   for(size_t i=0; i<pts1.size(); ++i) {
     cloud1.points[i].x = pts1[i].x - x1;
     cloud1.points[i].y = pts1[i].y - y1;
     cloud1.points[i].z = pts1[i].z - z1;
   }
   sensor_msgs::PointCloud cloud2;
-  cloud2.set_points_size(pts2.size());
-  cloud2.set_channels_size(0);
+  cloud2.points.resize(pts2.size());
+  cloud2.channels.resize(0);
   for(size_t i=0; i<pts2.size(); ++i) {
     cloud2.points[i].x = pts2[i].x - x2;
     cloud2.points[i].y = pts2[i].y - y2;

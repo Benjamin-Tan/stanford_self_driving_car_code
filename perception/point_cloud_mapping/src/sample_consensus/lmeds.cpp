@@ -29,7 +29,7 @@
  */
 
 /** \author Radu Bogdan Rusu */
-
+#include <ros/ros.h>
 #include <algorithm>
 #include <cfloat>
 #include <point_cloud_mapping/sample_consensus/lmeds.h>

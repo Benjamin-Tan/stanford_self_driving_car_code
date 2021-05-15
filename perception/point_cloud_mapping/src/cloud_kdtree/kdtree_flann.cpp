@@ -42,19 +42,19 @@ namespace cloud_kdtree
    * \param k_distances the resultant point distances
    */
   void
-    KdTreeFLANN::nearestKSearch (const geometry_msgs::Point32 &p_q, int k, std::vector<int> &k_indices, std::vector<float> &k_distances)
+    KdTreeFLANN::nearestKSearch (const geometry_msgs::Point32 &p_q, int k, std::vector<int> &k_indices, std::vector<double> &k_distances)
   {
     k_indices.resize (k);
     k_distances.resize (k);
 
-    float* p = (float*)malloc (3 * sizeof (float));
+    double* p = (double*)malloc (3 * sizeof (double));
     p[0] = p_q.x; p[1] = p_q.y; p[2] = p_q.z;
 
 //    std::cerr << p[0] <<  " " << p[1] << " " << p[2] << std::endl;
     m_lock_.lock ();
 //    int* nn_idx_ = (int*) malloc (k * sizeof (int));
 //    float* nn_dists_ = (float*) malloc (k * sizeof (float));
-    flann_find_nearest_neighbors_index (index_id_, p, 1, &k_indices[0], &k_distances[0], k, flann_param_.checks, &flann_param_);
+    flann_find_nearest_neighbors_index_double (index_id_, p, 1, &k_indices[0], &k_distances[0], k, &flann_param_);
 //    flann_find_nearest_neighbors_index (index_id_, p, 1, nn_idx_, nn_dists_, k, flann_param_.checks, &flann_param_);
 
 //    EXPECT_EQ (indices[0], 0);
@@ -96,7 +96,7 @@ namespace cloud_kdtree
    * \param k_distances the resultant point distances
    */
   void
-    KdTreeFLANN::nearestKSearch (const sensor_msgs::PointCloud &points, int index, int k, std::vector<int> &k_indices, std::vector<float> &k_distances)
+    KdTreeFLANN::nearestKSearch (const sensor_msgs::PointCloud &points, int index, int k, std::vector<int> &k_indices, std::vector<double> &k_distances)
   {
     if (index >= (int)points.points.size ())
       return;
@@ -104,11 +104,11 @@ namespace cloud_kdtree
     k_indices.resize (k);
     k_distances.resize (k);
 
-    float* p = (float*)malloc (3 * sizeof (float));
+    double* p = (double*)malloc (3 * sizeof (double));
     p[0] = points.points.at (index).x; p[1] = points.points.at (index).y; p[2] = points.points.at (index).z;
 
     m_lock_.lock ();
-    flann_find_nearest_neighbors_index (index_id_, p, 1, &k_indices[0], &k_distances[0], k, flann_param_.checks, &flann_param_);
+    flann_find_nearest_neighbors_index_double (index_id_, p, 1, &k_indices[0], &k_distances[0], k, &flann_param_);
     m_lock_.unlock ();
 
     free (p);
@@ -124,10 +124,10 @@ namespace cloud_kdtree
    * \param max_nn if given, bounds the maximum returned neighbors to this value
    */
   bool
-    KdTreeFLANN::radiusSearch (const geometry_msgs::Point32 &p_q, double radius, std::vector<int> &k_indices, std::vector<float> &k_distances,
+    KdTreeFLANN::radiusSearch (const geometry_msgs::Point32 &p_q, double radius, std::vector<int> &k_indices, std::vector<double> &k_distances,
                                int max_nn)
   {
-    float* p = (float*)malloc (3 * sizeof (float));
+    double* p = (double*)malloc (3 * sizeof (double));
     p[0] = p_q.x; p[1] = p_q.y; p[2] = p_q.z;
     radius *= radius;
 
@@ -141,7 +141,7 @@ namespace cloud_kdtree
     k_distances.resize (neighbors_in_radius_);
 
     m_lock_.lock ();
-    int neighbors_found = flann_radius_search (index_id_, p, &k_indices[0], &k_distances[0], neighbors_in_radius_, radius, flann_param_.checks, &flann_param_);
+    int neighbors_found = flann_radius_search_double (index_id_, p, &k_indices[0], &k_distances[0], neighbors_in_radius_, radius, &flann_param_);
     m_lock_.unlock ();
     free (p);
 
@@ -165,10 +165,10 @@ namespace cloud_kdtree
    * \param max_nn if given, bounds the maximum returned neighbors to this value
    */
   bool
-    KdTreeFLANN::radiusSearch (const sensor_msgs::PointCloud &points, int index, double radius, std::vector<int> &k_indices, std::vector<float> &k_distances,
+    KdTreeFLANN::radiusSearch (const sensor_msgs::PointCloud &points, int index, double radius, std::vector<int> &k_indices, std::vector<double> &k_distances,
                                int max_nn)
   {
-    float* p = (float*)malloc (3 * sizeof (float));
+    double* p = (double*)malloc (3 * sizeof (double));
     p[0] = points.points.at (index).x; p[1] = points.points.at (index).y; p[2] = points.points.at (index).z;
     radius *= radius;
 
@@ -182,8 +182,8 @@ namespace cloud_kdtree
     k_distances.resize (neighbors_in_radius_);
 
     m_lock_.lock ();
-    int neighbors_found = flann_radius_search (index_id_, p, &k_indices[0], &k_distances[0], neighbors_in_radius_,
-    		radius, flann_param_.checks, &flann_param_);
+    int neighbors_found = flann_radius_search_double (index_id_, p, &k_indices[0], &k_distances[0], neighbors_in_radius_,
+    		radius, &flann_param_);
     m_lock_.unlock ();
     free (p);
 
@@ -215,7 +215,7 @@ namespace cloud_kdtree
     }
 
     m_lock_.lock ();
-    points_ = (float*)malloc (ros_cloud.points.size () * 3 * sizeof (float));    // default number of dimensions (3 = xyz)
+    points_ = (double*)malloc (ros_cloud.points.size () * 3 * sizeof (double));    // default number of dimensions (3 = xyz)
 
     for (unsigned int cp = 0; cp < ros_cloud.points.size (); cp++)
     {
@@ -250,7 +250,7 @@ namespace cloud_kdtree
     }
 
     m_lock_.lock ();
-    points_ = (float*)malloc (indices.size () * 3 * sizeof (float));    // default number of dimensions (3 = xyz)
+    points_ = (double*)malloc (indices.size () * 3 * sizeof (double));    // default number of dimensions (3 = xyz)
 
     for (unsigned int cp = 0; cp < indices.size (); cp++)
     {

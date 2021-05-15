@@ -39,7 +39,7 @@
 
 #include <boost/thread/mutex.hpp>
 
-#include <flann.h>
+#include <flann/flann.h>
 
 namespace cloud_kdtree
 {
@@ -66,9 +66,8 @@ namespace cloud_kdtree
 
         // Create the kd_tree representation
         float speedup;
-        flann_param_.algorithm = KDTREE;
-        flann_param_.log_level = LOG_NONE;
-        flann_param_.log_destination = NULL;
+        flann_param_.algorithm = FLANN_INDEX_KDTREE;
+        flann_param_.log_level = FLANN_LOG_NONE;
 
         flann_param_.trees = 1;
         flann_param_.target_precision = -1;
@@ -76,7 +75,7 @@ namespace cloud_kdtree
 
         m_lock_.lock ();
         printf("Building index\n");
-        index_id_    = flann_build_index (points_, nr_points_, dim_, &speedup, &flann_param_);
+        index_id_    = flann_build_index_double (points_, nr_points_, dim_, &speedup, &flann_param_);
         printf("Index built\n");
         m_lock_.unlock ();
       }
@@ -104,16 +103,15 @@ namespace cloud_kdtree
 
         // Create the kd_tree representation
         float speedup;
-        flann_param_.algorithm = KDTREE;
-        flann_param_.log_level = LOG_NONE;
-        flann_param_.log_destination = NULL;
+        flann_param_.algorithm = FLANN_INDEX_KDTREE;
+        flann_param_.log_level = FLANN_LOG_NONE;
 
         flann_param_.trees = 1;
         flann_param_.target_precision = -1;
         flann_param_.checks = 128;
 
         m_lock_.lock ();
-        index_id_    = flann_build_index (points_, nr_points_, dim_, &speedup, &flann_param_);
+        index_id_    = flann_build_index_double (points_, nr_points_, dim_, &speedup, &flann_param_);
         m_lock_.unlock ();
       }
 
@@ -133,8 +131,8 @@ namespace cloud_kdtree
         m_lock_.unlock ();
       }
 
-      virtual void nearestKSearch (const geometry_msgs::Point32 &p_q, int k, std::vector<int> &k_indices, std::vector<float> &k_distances);
-      virtual void nearestKSearch (const sensor_msgs::PointCloud &points, int index, int k, std::vector<int> &k_indices, std::vector<float> &k_distances);
+      virtual void nearestKSearch (const geometry_msgs::Point32 &p_q, int k, std::vector<int> &k_indices, std::vector<double> &k_distances);
+      virtual void nearestKSearch (const sensor_msgs::PointCloud &points, int index, int k, std::vector<int> &k_indices, std::vector<double> &k_distances);
 
       //////////////////////////////////////////////////////////////////////////////////////////////////////////////////
       /** \brief Search for k-nearest neighbors for the given query point.
@@ -144,19 +142,19 @@ namespace cloud_kdtree
        * \param k_distances the resultant point distances
        */
       virtual inline void
-        nearestKSearch (int index, int k, std::vector<int> &k_indices, std::vector<float> &k_distances)
+        nearestKSearch (int index, int k, std::vector<int> &k_indices, std::vector<double> &k_distances)
       {
         if (index >= nr_points_)
           return;
 
         m_lock_.lock ();
-        flann_find_nearest_neighbors_index (index_id_, &points_[index], 1, &k_indices[0], &k_distances[0], k, flann_param_.checks, &flann_param_);
+        flann_find_nearest_neighbors_index_double (index_id_, &points_[index], 1, &k_indices[0], &k_distances[0], k, &flann_param_);
         m_lock_.unlock ();
         return;
       }
 
-      virtual bool radiusSearch (const geometry_msgs::Point32 &p_q, double radius, std::vector<int> &k_indices, std::vector<float> &k_distances, int max_nn = INT_MAX);
-      virtual bool radiusSearch (const sensor_msgs::PointCloud &points, int index, double radius, std::vector<int> &k_indices, std::vector<float> &k_distances, int max_nn = INT_MAX);
+      virtual bool radiusSearch (const geometry_msgs::Point32 &p_q, double radius, std::vector<int> &k_indices, std::vector<double> &k_distances, int max_nn = INT_MAX);
+      virtual bool radiusSearch (const sensor_msgs::PointCloud &points, int index, double radius, std::vector<int> &k_indices, std::vector<double> &k_distances, int max_nn = INT_MAX);
 
       //////////////////////////////////////////////////////////////////////////////////////////////////////////////////
       /** \brief Search for all the nearest neighbors of the query point in a given radius.
@@ -167,7 +165,7 @@ namespace cloud_kdtree
        * \param max_nn if given, bounds the maximum returned neighbors to this value
        */
       virtual inline bool
-        radiusSearch (int index, double radius, std::vector<int> &k_indices, std::vector<float> &k_distances,
+        radiusSearch (int index, double radius, std::vector<int> &k_indices, std::vector<double> &k_distances,
                       int max_nn = INT_MAX)
       {
         radius *= radius;
@@ -182,8 +180,8 @@ namespace cloud_kdtree
         k_distances.resize (neighbors_in_radius_);
 
         m_lock_.lock ();
-        int neighbors_found = flann_radius_search (index_id_, &points_[index], &k_indices[0], &k_distances[0],
-        		neighbors_in_radius_, radius, flann_param_.checks, &flann_param_);
+        int neighbors_found = flann_radius_search_double (index_id_, &points_[index], &k_indices[0], &k_distances[0],
+        		neighbors_in_radius_, radius, &flann_param_);
         m_lock_.unlock ();
 
         if (neighbors_found == 0) {
@@ -212,7 +210,7 @@ namespace cloud_kdtree
       FLANNParameters flann_param_;
 
       /** \brief Internal pointer to data */
-      float* points_;
+      double* points_;
 
       /** \brief Number of points in the tree */
       int nr_points_;

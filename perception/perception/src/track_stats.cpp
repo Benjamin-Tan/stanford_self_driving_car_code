@@ -60,14 +60,14 @@ void computeCentroid(const PointCloud& pc, float* x, float* y, float* z) {
   *x = 0;
   *y = 0;
   *z = 0;
-  for(size_t i=0; i<pc.get_points_size(); ++i) {
+  for(size_t i=0; i<pc.points.size(); ++i) {
     *x += pc.points[i].x;
     *y += pc.points[i].y;
     *z += pc.points[i].z;
   }
-  *x /= (double)pc.get_points_size();
-  *y /= (double)pc.get_points_size();
-  *z /= (double)pc.get_points_size();
+  *x /= (double)pc.points.size();
+  *y /= (double)pc.points.size();
+  *z /= (double)pc.points.size();
 }
     
 

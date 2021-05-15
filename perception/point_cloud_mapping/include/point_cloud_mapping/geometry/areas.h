@@ -33,6 +33,7 @@
 #ifndef _CLOUD_GEOMETRY_AREAS_H_
 #define _CLOUD_GEOMETRY_AREAS_H_
 
+#include <ros/ros.h>
 // ROS includes
 #include <geometry_msgs/Point32.h>
 #include <sensor_msgs/PointCloud.h>
